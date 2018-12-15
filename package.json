@@ -1,0 +1,25 @@
+{
+  "name": "weplay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdwat90/WePlay.git"
+  },
+  "author": "David Watson, Cassie Koyle, Luke Karlovich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mdwat90/WePlay/issues"
+  },
+  "homepage": "https://github.com/mdwat90/WePlay#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.0"
+  }
+}
