@@ -11,13 +11,18 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
+
 // Connect to the Mongo DB
-mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/weplay"
-);
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || ("mongodb://localhost/weplay");
+
+mongoose.connect(MONGODB_URI , { useNewUrlParser: true });
+
+
+
 
 // console.log that your server is up and running
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`));
 
 // create a GET route
 app.get('/express_backend', (req, res) => {
