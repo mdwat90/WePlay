@@ -20,7 +20,22 @@ app.use(routes);
 var MONGODB_URI = process.env.MONGODB_URI || ("mongodb://localhost/weplay");
 mongoose.connect(MONGODB_URI , { useNewUrlParser: true });
 
+function onSignIn(googleUser) {
+  // Useful data for your client-side scripts:
+  var profile = googleUser.getBasicProfile();
+  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+  console.log('Full Name: ' + profile.getName());
+  console.log('Given Name: ' + profile.getGivenName());
+  console.log('Family Name: ' + profile.getFamilyName());
+  console.log("Image URL: " + profile.getImageUrl());
+  console.log("Email: " + profile.getEmail());
 
+  // The ID token you need to pass to your backend:
+  var id_token = googleUser.getAuthResponse().id_token;
+  console.log("ID Token: " + id_token);
+};
+
+onSignIn();
 
 // console.log that your server is up and running
 app.listen(port, () => console.log(`🌎  ==> API Server now listening on PORT ${port}!`));
