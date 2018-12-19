@@ -5,6 +5,7 @@ import API from "../../utils/API";
 import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, TextArea, FormBtn } from "../../components/Form";
+import SideNav from "../../components/SideNav/SideNav";
 
 class Books extends Component {
   // Setting our component's initial state
@@ -81,11 +82,16 @@ class Books extends Component {
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="md-10">
             <Jumbotron>
               <h1>WePlay</h1>
             </Jumbotron>
-            <form>
+            <SideNav />
+            </Col>
+        </Row>
+  
+  
+            <form size="md-10">
               <Input
                 value={this.state.title}
                 onChange={this.handleInputChange}
@@ -159,11 +165,11 @@ class Books extends Component {
                 Submit Event
               </FormBtn>
             </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
+          
+          <Col size="md-6">
+            
               <h1>Current Events</h1>
-            </Jumbotron>
+            
             {this.state.books.length ? (
               <List>
                 {this.state.books.map(book => {
@@ -185,7 +191,7 @@ class Books extends Component {
                 <h3>No Results to Display</h3>
               )}
           </Col>
-        </Row>
+       
       </Container>
     );
   }
