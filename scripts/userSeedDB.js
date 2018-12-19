@@ -1,13 +1,12 @@
+// This file empties the Games collection and inserts the games below
 const mongoose = require("mongoose");
 const db = require("../models");
 
-// This file empties the Games collection and inserts the games below
 
-mongoose.connect(
-  process.env.MONGODB_URI ||
-  "mongodb://localhost/weplay"
-);
-
+// Connect to the Mongo DB!
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || ("mongodb://localhost/weplay");
+mongoose.connect(MONGODB_URI , { useNewUrlParser: true });
 
 const userSeed = [
   {
@@ -15,8 +14,8 @@ const userSeed = [
     email: 'dwat@email.com'
   },
   {
-    name: 'David',
-    email: 'dwat@email.com'
+    name: 'Luke',
+    email: 'luke.karlovich@gmail.com'
   },
 ];
 
