@@ -6,7 +6,7 @@ const gameSchema = new Schema({
   sport:{ type: String, required: true },
   author: { type: String, required: true },
   players: Number,
-  date: {type: Date, required: true },
+  date: {type: String, required: true },
   time: Number,
   gender: String,
   authorEmail: { type: String, required: true },
