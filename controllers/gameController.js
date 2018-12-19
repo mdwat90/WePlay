@@ -1,9 +1,8 @@
 const db = require("../models");
 
-// Defining methods for the booksController
+// Defining methods for the gamesController
 module.exports = {
   findAll: function(req, res) {
-    console.log("this is the findAll firing in the controller")
     db.Game
       .find(req.query)
       .sort({ date: -1 })
@@ -17,7 +16,6 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
-    console.log("create firing in the controller")
     db.Game
       .create(req.body)
       .then(dbModel => res.json(dbModel))
@@ -30,7 +28,6 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   remove: function(req, res) {
-    console.log("remove firing in the controller")
     db.Game
       .findById({ _id: req.params.id })
       .then(dbModel => dbModel.remove())

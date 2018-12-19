@@ -4,9 +4,6 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   name: { type: String, required: true},
   email: { type: String, required: true},
-  gamesCreated: String,
-  gamesJoined: String,
-  
 });
 
 const User = mongoose.model("User", userSchema);
