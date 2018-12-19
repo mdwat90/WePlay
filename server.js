@@ -14,22 +14,10 @@ if (process.env.NODE_ENV === "production") {
 // Add routes, both API and view
 app.use(routes);
 
-
 // Connect to the Mongo DB!
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
 var MONGODB_URI = process.env.MONGODB_URI || ("mongodb://localhost/weplay");
 mongoose.connect(MONGODB_URI , { useNewUrlParser: true });
 
-
-
 // console.log that your server is up and running
 app.listen(port, () => console.log(`🌎  ==> API Server now listening on PORT ${port}!`));
-
-// create a GET route
-app.get('/express_backend', (req, res) => {
-  res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
-});
-
-app.get('/', (req, res) => {
-  res.send("hello world")
-})
