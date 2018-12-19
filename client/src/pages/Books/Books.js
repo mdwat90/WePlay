@@ -62,15 +62,15 @@ class Books extends Component {
       API.saveBook({
         title: this.state.title,
         author: this.state.author,
-        sport: this.state.sport,
+        //sport: this.state.sport,
         //players: this.state.players,
-        date: this.state.date,
+        //date: this.state.date,
         //time:this.state.time,
         //gender: this.state.gender,
         //city: this.state.city,
         //state: this.state.state,
         //description: this.state.description,
-        authorEmail: this.state.authorEmail,
+        //authorEmail: this.state.authorEmail,
       })
         .then(res => this.loadBooks())
         .catch(err => console.log(err));
