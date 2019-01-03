@@ -1,25 +1,31 @@
 import axios from "axios";
 
 export default {
-  // Gets all books
-  getBooks: function() {
-    console.log("getBooks in the API client side")
-    return axios.get("/api/books");
+  // Gets all games
+  getGames: function() {
+    console.log("getGames in the API client side")
+    return axios.get("/api/games");
   },
   // Gets the book with the given id
-  getBook: function(id) {
-    console.log("getBooks in the API client side")
-    return axios.get("/api/books/" + id);
+  getGame: function(id) {
+    console.log("getGames in the API client side")
+    return axios.get("/api/games/" + id);
   },
   // Deletes the book with the given id
-  deleteBook: function(id) {
-    console.log("deleteBook firing in the API client side")
-    return axios.delete("/api/books/" + id);
+  deleteGame: function(id) {
+    console.log("deleteGame firing in the API client side")
+    return axios.delete("/api/games/" + id);
   },
   // Saves a book to the database
-  saveBook: function(bookData) {
-    console.log("saveBook firing in the API client side")
+  saveGame: function(bookData) {
+    console.log("saveGame firing in the API client side")
     console.log(bookData)
-    return axios.post("/api/books", bookData);
-  }
+    return axios.post("/api/games", bookData);
+  },
+
+  // Gets the book with the given id
+  getUser: function(id) {
+    console.log("getGames in the API client side")
+    return axios.get("/api/users/" + id);
+  },
 };

@@ -1,10 +1,10 @@
 import React from "react";
-import Books from "./pages/Books";
+import Games from "./pages/Games";
 
 function App() {
   return (
     <div>
-      <Books />
+      <Games />
     </div>
   );
 }
