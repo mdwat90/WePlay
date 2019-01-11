@@ -21,7 +21,8 @@ class Books extends Component {
     gender: "",
     city: "",
     state: "",
-    description: ""
+    description: "",
+    emailToWho: ""
   };
 
   // When the component mounts, load all books and save them to this.state.books
@@ -71,12 +72,24 @@ class Books extends Component {
         //city: this.state.city,
         //state: this.state.state,
         //description: this.state.description,
-        //authorEmail: this.state.authorEmail,
+        authorEmail: this.state.authorEmail
       })
         .then(res => this.loadBooks())
         .catch(err => console.log(err));
     }
   };
+
+
+  sendMail = () => {
+    console.log("sendMail hit on books.js")
+    API.sendMail({
+      emailToWho: this.state.emailToWho
+    })
+  }
+  // sendMail = emailToWho => {
+  //   console.log("sendMail hit on books.js")
+  //   API.sendMail(emailToWho)
+  // }
 
   render() {
     return (
@@ -87,111 +100,124 @@ class Books extends Component {
               <h1>WePlay</h1>
             </Jumbotron>
             <SideNav />
-            </Col>
-        </Row>
-  
-  
-            <form size="md-10">
-              <Input
-                value={this.state.title}
-                onChange={this.handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                value={this.state.author}
-                onChange={this.handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <Input
-                value={this.state.sport}
-                onChange={this.handleInputChange}
-                name="sport"
-                placeholder="Sport (required)"
-              />
-              <Input
-                value={this.state.players}
-                onChange={this.handleInputChange}
-                name="players"
-                placeholder="Players"
-              />
-              <Input
-                value={this.state.date}
-                onChange={this.handleInputChange}
-                name="date"
-                placeholder="Date (required)"
-              />
-              <Input
-                value={this.state.time}
-                onChange={this.handleInputChange}
-                name="time"
-                placeholder="Time"
-              />
-              <Input
-                value={this.state.gender}
-                onChange={this.handleInputChange}
-                name="gender"
-                placeholder="Gender"
-              />
-              <Input
-                value={this.state.authorEmail}
-                onChange={this.handleInputChange}
-                name="authorEmail"
-                placeholder="Authors Email (required)"
-              />
-              <Input
-                value={this.state.city}
-                onChange={this.handleInputChange}
-                name="city"
-                placeholder="City"
-              />
-              <Input
-                value={this.state.state}
-                onChange={this.handleInputChange}
-                name="state"
-                placeholder="State"
-              />
-              <TextArea
-                value={this.state.description}
-                onChange={this.handleInputChange}
-                name="descrition"
-                placeholder="Descripton (Optional)"
-              />
-              <FormBtn
-                disabled={!(this.state.author && this.state.title)}
-                onClick={this.handleFormSubmit}
-              >
-                Submit Event
-              </FormBtn>
-            </form>
-          
-          <Col size="md-6">
-            
-              <h1>Current Events</h1>
-            
-            {this.state.books.length ? (
-              <List>
-                {this.state.books.map(book => {
-                  return (
-                    <ListItem key={book._id}>
-                      <a href={"/books/" + book._id}>
-                        <strong>
-                          {book.title} by {book.author}
-                        </strong>
-                      </a>
-                      <h6>Playing: {book.sport}</h6>
-                      <h6>Email: {book.authorEmail}</h6>
-                      <DeleteBtn onClick={() => this.deleteBook(book._id)} />
-                    </ListItem>
-                  );
-                })}
-              </List>
-            ) : (
-                <h3>No Results to Display</h3>
-              )}
           </Col>
-       
+        </Row>
+
+        <form size="md-10">
+          <Input
+            value={this.state.emailToWho}
+            type="email"
+            onChange={this.handleInputChange}
+            name="emailToWho"
+            placeholder="Email to who?"
+          />
+          <FormBtn
+            onClick={() => this.sendMail()}
+          >Send Mail
+              </FormBtn>
+        </form>
+
+        <form size="md-10">
+          <Input
+            value={this.state.title}
+            onChange={this.handleInputChange}
+            name="title"
+            placeholder="Title (required)"
+          />
+          <Input
+            value={this.state.author}
+            onChange={this.handleInputChange}
+            name="author"
+            placeholder="Author (required)"
+          />
+          <Input
+            value={this.state.sport}
+            onChange={this.handleInputChange}
+            name="sport"
+            placeholder="Sport (required)"
+          />
+          <Input
+            value={this.state.players}
+            onChange={this.handleInputChange}
+            name="players"
+            placeholder="Players"
+          />
+          <Input
+            value={this.state.date}
+            onChange={this.handleInputChange}
+            name="date"
+            placeholder="Date (required)"
+          />
+          <Input
+            value={this.state.time}
+            onChange={this.handleInputChange}
+            name="time"
+            placeholder="Time"
+          />
+          <Input
+            value={this.state.gender}
+            onChange={this.handleInputChange}
+            name="gender"
+            placeholder="Gender"
+          />
+          <Input
+            value={this.state.authorEmail}
+            onChange={this.handleInputChange}
+            name="authorEmail"
+            placeholder="Authors Email (required)"
+          />
+          <Input
+            value={this.state.city}
+            onChange={this.handleInputChange}
+            name="city"
+            placeholder="City"
+          />
+          <Input
+            value={this.state.state}
+            onChange={this.handleInputChange}
+            name="state"
+            placeholder="State"
+          />
+          <TextArea
+            value={this.state.description}
+            onChange={this.handleInputChange}
+            name="descrition"
+            placeholder="Descripton (Optional)"
+          />
+          <FormBtn
+            disabled={!(this.state.author && this.state.title)}
+            onClick={this.handleFormSubmit}
+          >
+            Submit Event
+              </FormBtn>
+        </form>
+
+        <Col size="md-6">
+
+          <h1>Current Events</h1>
+
+          {this.state.books.length ? (
+            <List>
+              {this.state.books.map(book => {
+                return (
+                  <ListItem key={book._id}>
+                    <a href={"/books/" + book._id}>
+                      <strong>
+                        {book.title} by {book.author}
+                      </strong>
+                    </a>
+                    <h6>Playing: {book.sport}</h6>
+                    <h6>Email: {book.authorEmail}</h6>
+                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
+                  </ListItem>
+                );
+              })}
+            </List>
+          ) : (
+              <h3>No Results to Display</h3>
+            )}
+        </Col>
+
       </Container>
     );
   }

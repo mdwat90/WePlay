@@ -21,5 +21,11 @@ export default {
     console.log("saveBook firing in the API client side")
     console.log(gameData)
     return axios.post("/api/games", gameData);
+  },
+  // sends mail
+  sendMail: function(emailToWho) {
+    console.log("sendMail hit in API.js client side")
+    console.log(emailToWho)
+    return axios.post("/api/sendMail", emailToWho)
   }
 };
