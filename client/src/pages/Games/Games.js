@@ -5,19 +5,26 @@ import API from "../../utils/API";
 import { Col, Row, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 import { Input, TextArea, FormBtn } from "../../components/Form";
-import SideNav from "../../components/SideNav/SideNav";
+// import SideNav from "../../components/SideNav/SideNav";
 
-class Books extends Component {
+let uId = '5c15564ef0adbf8c0fbab4a7'
+
+// function to retrieve userId
+// userId = () =>
+
+
+class Games extends Component {
   // Setting our component's initial state
   state = {
-    books: [],
+    games: [],
     title: "",
     sport: "",
     authorEmail: "",
     author: "",
-    players: "",
-    date: "",
-    time: "",
+    authorId: "",
+    playerNumber: "",
+    // date: "",
+    // time: "",
     gender: "",
     city: "",
     state: "",
@@ -27,24 +34,50 @@ class Books extends Component {
 
   // When the component mounts, load all books and save them to this.state.books
   componentDidMount() {
-    this.loadBooks();
+    this.loadGames();
+    this.loadUser(uId);
   }
 
-  // Loads all books  and sets them to this.state.books
-  loadBooks = () => {
-    API.getBooks()
+  // Loads all books and sets them to this.state.books
+  loadGames = () => {
+    API.getGames()
       .then(res =>
-        this.setState({ books: res.data, title: "", sport: "", author: "", authorEmail: "", synopsis: "" })
+        this.setState({
+          games: res.data,
+          title: "",
+          sport: "",
+          playerNumber: "",
+          date: "",
+          time: "",
+          gender: "",
+          city: "",
+          state: "",
+          description: ""
+        })
+      )
+
+      .catch(err => console.log(err));
+  };
+
+
+  // Loads all books  and sets them to this.state.books
+  loadUser = id => {
+    API.getUser(id)
+      .then(res =>
+        this.setState({
+          author: res.data.name,
+          authorEmail: res.data.email
+        })
       )
 
       .catch(err => console.log(err));
   };
 
   // Deletes a book from the database with a given id, then reloads books from the db
-  deleteBook = id => {
-    console.log("deletebook firing in Books.js client")
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
+  deleteGame = id => {
+    console.log("deleteGame firing in Games.js client")
+    API.deleteGame(id)
+      .then(res => this.loadGames())
       .catch(err => console.log(err));
   };
 
@@ -61,20 +94,21 @@ class Books extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.title && this.state.author) {
-      API.saveBook({
+      API.saveGame({
         title: this.state.title,
         author: this.state.author,
-        //sport: this.state.sport,
-        //players: this.state.players,
-        //date: this.state.date,
-        //time:this.state.time,
-        //gender: this.state.gender,
-        //city: this.state.city,
-        //state: this.state.state,
-        //description: this.state.description,
-        authorEmail: this.state.authorEmail
+        sport: this.state.sport,
+        playerNumber: this.state.playerNumber,
+        // date: this.state.date,
+        // time:this.state.time,
+        gender: this.state.gender,
+        city: this.state.city,
+        state: this.state.state,
+        description: this.state.description,
+        authorEmail: this.state.authorEmail,
+        authorId: uId,
       })
-        .then(res => this.loadBooks())
+        .then(res => this.loadGames())
         .catch(err => console.log(err));
     }
   };
@@ -99,7 +133,7 @@ class Books extends Component {
             <Jumbotron>
               <h1>WePlay</h1>
             </Jumbotron>
-            <SideNav />
+            {/* <SideNav /> */}
           </Col>
         </Row>
 
@@ -116,7 +150,6 @@ class Books extends Component {
           >Send Mail
               </FormBtn>
         </form>
-
         <form size="md-10">
           <Input
             value={this.state.title}
@@ -131,15 +164,21 @@ class Books extends Component {
             placeholder="Author (required)"
           />
           <Input
+            value={this.state.authorEmail}
+            onChange={this.handleInputChange}
+            name="authorEmail"
+            placeholder="Authors Email (required)"
+          />
+          <Input
             value={this.state.sport}
             onChange={this.handleInputChange}
             name="sport"
             placeholder="Sport (required)"
           />
           <Input
-            value={this.state.players}
+            value={this.state.playerNumber}
             onChange={this.handleInputChange}
-            name="players"
+            name="playerNumber"
             placeholder="Players"
           />
           <Input
@@ -159,12 +198,6 @@ class Books extends Component {
             onChange={this.handleInputChange}
             name="gender"
             placeholder="Gender"
-          />
-          <Input
-            value={this.state.authorEmail}
-            onChange={this.handleInputChange}
-            name="authorEmail"
-            placeholder="Authors Email (required)"
           />
           <Input
             value={this.state.city}
@@ -196,19 +229,23 @@ class Books extends Component {
 
           <h1>Current Events</h1>
 
-          {this.state.books.length ? (
+          {this.state.games.length ? (
             <List>
-              {this.state.books.map(book => {
+              {this.state.games.map(game => {
                 return (
-                  <ListItem key={book._id}>
-                    <a href={"/books/" + book._id}>
+                  <ListItem key={game._id}>
+                    <a href={"/games/" + game._id}>
                       <strong>
-                        {book.title} by {book.author}
+                        {game.title} by {game.author}
                       </strong>
                     </a>
-                    <h6>Playing: {book.sport}</h6>
-                    <h6>Email: {book.authorEmail}</h6>
-                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
+                    <h6>Sport: {game.sport}</h6>
+                    <h6>Email: {game.authorEmail}</h6>
+                    <h6># of Players: {game.playerNumber}</h6>
+                    <h6>Location: {game.city}, {game.state}</h6>
+                    <h6>Male/Female/Co-ed: {game.gender}</h6>
+                    <h6>Description: {game.description}</h6>
+                    <DeleteBtn onClick={() => this.deleteGame(game._id)} />
                   </ListItem>
                 );
               })}
@@ -223,4 +260,4 @@ class Books extends Component {
   }
 }
 
-export default Books;
+export default Games;
