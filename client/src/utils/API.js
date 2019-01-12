@@ -24,7 +24,7 @@ export default {
   },
   // Gets the book with the given id
   getUser: function (id) {
-    console.log("getGames in the API client side")
+    console.log("getUser in the API client side")
     return axios.get("/api/users/" + id);
   },
   // sends mail

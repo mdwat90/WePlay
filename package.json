@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/mdwat90/WePlay#readme",
   "dependencies": {
+    "auth0-js": "^9.9.0",
     "axios": "^0.18.0",
     "concurrently": "^4.1.0",
     "dotenv": "^6.2.0",
