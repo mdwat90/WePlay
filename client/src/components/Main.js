@@ -1,26 +1,38 @@
 import React, { Component } from 'react';
+import { Row, Col, Navbar, NavItem, Button} from 'react-materialize';
 
 export default class Main extends Component {
     render() {
         return (
-            <div>
-            <p className="App-intro">
-                Hello {this.props.name}!
-                email {this.props.useremail}
-                id {this.props.userID}
-    
-            Do you want to see the secret area? <a href="/secret">click here</a>
-            </p>
+        <Row>
+        <Col s={12}>
+          <Navbar className="cyan darken-3 center">
+            <h4>WePlay</h4>
+            <NavItem>
+            </NavItem>
+          </Navbar>
+
+            
             {!this.props.auth.isAuthenticated() &&
 
-            <div>
+            <div className="center">
                 <h1>
                     Please login first
                 </h1>
-                <button onClick={this.props.auth.login}>Login</button>
+                <Button onClick={this.props.auth.login}>Login</Button>
             </div>
             }
-            </div >
+            <p className="App-intro center">
+                Hello{this.props.name}!
+                {this.props.useremail}
+                {this.props.userID}
+    
+            {" "}Looking for WePlay? <a href="/secret">click here</a>
+            </p>
+           
+            </Col>
+            </Row>
+            
         )
     }
 }

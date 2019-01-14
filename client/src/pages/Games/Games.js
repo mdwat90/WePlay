@@ -6,7 +6,7 @@ import API from "../../utils/API";
 import {List, ListItem} from "../../components/List"
 import { TextArea, FormBtn } from "../../components/Form";
 import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
-let uId = '5c15564ef0adbf8c0fbab4a7'
+//let uId = '5c15564ef0adbf8c0fbab4a7'
 
 // function to retrieve userId
 // userId = () =>
@@ -165,13 +165,13 @@ class Games extends Component {
             )}
         </Col>
 
-
-        <SideNav 
+<Col s={8}>
+        <SideNav
           // trigger={<Button></Button>}
           // options={{ closeOnClick: true }}
         >
           {/* USER SIDENAV SECTION */}
-          <SideNavItem userView
+          <SideNavItem userView s={12}
             user={{
               background: "https://media.istockphoto.com/photos/abstract-blue-background-picture-id875762470?k=6&m=875762470&s=612x612&w=0&h=FYhQuC9CZlxOZW-rAkEvQ0jq1onsY18bUN9a2HBQd3k=",
               image: this.state.userImage,
@@ -182,7 +182,7 @@ class Games extends Component {
           {/* <SideNavItem>{this.state.author}</SideNavItem>
           <SideNavItem>{this.state.userID}</SideNavItem> */}
           <SideNavItem>
-            <button onClick={this.props.auth.logout}>Logout</button>
+            <Button onClick={this.props.auth.logout}>Logout</Button>
           </SideNavItem>
           <SideNavItem subheader>Filters</SideNavItem>
           {/* FILTER FOR GENDER */}
@@ -646,7 +646,7 @@ class Games extends Component {
             </Modal>
           </SideNavItem>
         </SideNav>
-
+        </Col>
       </Row>
     );
   }
