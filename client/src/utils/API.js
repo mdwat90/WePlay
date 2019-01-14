@@ -22,6 +22,12 @@ export default {
     console.log(bookData)
     return axios.post("/api/games", bookData);
   },
+  // Saves a book to the database
+  saveUser: function (userData) {
+    console.log("saveUser firing in the API client side")
+    console.log(userData)
+    return axios.post("/api/users", userData);
+  },
   // Gets the book with the given id
   getUser: function (id) {
     console.log("getUser in the API client side")
