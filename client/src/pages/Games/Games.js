@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../../components/SideNav/SideNav.css"
 import DeleteBtn from "../../components/DeleteBtn";
-import { List, ListItem } from "../../components/List";
+//import { List, ListItem } from "../../components/List";
 import API from "../../utils/API";
 import {List, ListItem} from "../../components/List"
 import { TextArea, FormBtn } from "../../components/Form";
@@ -166,7 +166,7 @@ class Games extends Component {
         </Col>
 
 
-        <SideNav
+        <SideNav 
           // trigger={<Button></Button>}
           // options={{ closeOnClick: true }}
         >
