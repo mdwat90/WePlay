@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import "../../components/SideNav/SideNav.css"
-import "../../components/SideNavItem/SideNavItem.css"
 import DeleteBtn from "../../components/DeleteBtn";
 import API from "../../utils/API";
+import {List, ListItem} from "../../components/List"
 import { TextArea, FormBtn } from "../../components/Form";
-import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, List, ListItem, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
+import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
 let uId = '5c15564ef0adbf8c0fbab4a7'
 
 // function to retrieve userId
@@ -124,6 +124,7 @@ class Games extends Component {
 
           {this.state.games.length ? (
             <List>
+              
               {this.state.games.map(game => {
                 return (
                   <ListItem key={game._id}>
