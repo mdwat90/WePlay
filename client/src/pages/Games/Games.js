@@ -8,10 +8,6 @@ import { TextArea, FormBtn } from "../../components/Form";
 import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
 //let uId = '5c15564ef0adbf8c0fbab4a7'
 
-// function to retrieve userId
-// userId = () =>
-
-
 class Games extends Component {
   // Setting our component's initial state
   state = {
@@ -24,14 +20,14 @@ class Games extends Component {
     playerNumber: "",
     date: "",
     time: "",
-    //gender: "",
+    gender: "",
     city: "",
     state: "",
     description: "",
     emailToWho: "",
     userImage: this.props.userImage,
-    userID: this.props.userID
-
+    userID: this.props.userID,
+    isButtonDisabled: false
   };
 
   //When the component mounts, load all books and save them to this.state.books
@@ -83,6 +79,17 @@ class Games extends Component {
       .catch(err => console.log(err));
   };
 
+  // Deletes a book from the database with a given id, then reloads books from the db
+  updateGame = (id, userData) => {
+    console.log("Player added to game")
+    this.setState({
+      isButtonDisabled: true
+    });
+    API.updateGame(id, userData)
+      .then(res => this.loadGames())
+      .catch(err => console.log(err));
+  };
+
   // Handles updating component state when the user types into the input field
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -101,8 +108,8 @@ class Games extends Component {
         author: this.state.author,
         sport: this.state.sport,
         playerNumber: this.state.playerNumber,
-        // date: this.state.date,
-        // time:this.state.time,
+        date: this.state.date,
+        time:this.state.time,
         gender: this.state.gender,
         city: this.state.city,
         state: this.state.state,
@@ -151,10 +158,17 @@ class Games extends Component {
                     </a>
                     <h6>Sport: {game.sport}</h6>
                     <h6>Email: {game.authorEmail}</h6>
+                    <h6>Date: {game.date}</h6>
+                    <h6>Time: {game.time}</h6>
                     <h6># of Players: {game.playerNumber}</h6>
                     <h6>Location: {game.city}, {game.state}</h6>
                     <h6>Male/Female/Co-ed: {game.gender}</h6>
                     <h6>Description: {game.description}</h6>
+                    <FormBtn
+                    onClick={() => this.updateGame(game._id, this.props.userID)}
+                    disabled={this.state.isButtonDisabled}>
+                      Join!
+                    </FormBtn>
                     <DeleteBtn onClick={() => this.deleteGame(game._id)} />
                   </ListItem>
                 );
