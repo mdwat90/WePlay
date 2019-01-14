@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import "../../components/SideNav/SideNav.css"
-import "../../components/SideNavItem/SideNavItem.css"
+//import "../../components/SideNav/SideNav.css"
+//import "../../components/SideNavItem/SideNavItem.css"
 import DeleteBtn from "../../components/DeleteBtn";
+import { List, ListItem } from "../../components/List";
 import API from "../../utils/API";
 import { TextArea, FormBtn } from "../../components/Form";
-import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, List, ListItem, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
-let uId = '5c15564ef0adbf8c0fbab4a7'
+import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
+
+
 
 // function to retrieve userId
 // userId = () =>
@@ -21,18 +23,22 @@ class Games extends Component {
     author: "",
     authorId: "",
     playerNumber: "",
-    // date: "",
-    // time: "",
-    gender: "",
+    date: "",
+    time: "",
+    //gender: "",
     city: "",
     state: "",
-    description: ""
+    description: "",
+    emailToWho: "",
+    userImage: this.props.userImage,
+    userID: this.props.userID
+
   };
 
-  // When the component mounts, load all books and save them to this.state.books
+  //When the component mounts, load all books and save them to this.state.books
   componentDidMount() {
     this.loadGames();
-    this.loadUser(uId);
+    this.loadUser(this.state.userID);
   }
 
   // Loads all books and sets them to this.state.books
@@ -103,22 +109,33 @@ class Games extends Component {
         state: this.state.state,
         description: this.state.description,
         authorEmail: this.state.authorEmail,
-        authorId: uId,
+        authorId: this.state.userID,
       })
         .then(res => this.loadGames())
         .catch(err => console.log(err));
     }
   };
+
+  sendMail = () => {
+    console.log("sendMail hit on games.js")
+    API.sendMail({
+      emailToWho: this.state.emailToWho
+    })
+  }
+
+
   render() {
     return (
+
       <Row>
         <Col s={8} offset='s4'>
-        <Navbar className="cyan darken-3 center">
-              <h4>WePlay</h4>
-              <NavItem></NavItem>
-        </Navbar>
-        
-      
+          <Navbar className="cyan darken-3 center">
+            <h4>WePlay</h4>
+            <NavItem>
+            </NavItem>
+          </Navbar>
+
+
 
           <h3 className="center">Current Games</h3>
 
@@ -147,36 +164,42 @@ class Games extends Component {
               <h5 className="center">No Results to Display</h5>
             )}
         </Col>
-       
 
-        <SideNav className="sideNav"
-        // trigger={<Button>Player Profile</Button>}
-        // options={{ closeOnClick: true }}
+
+        <SideNav
+          // trigger={<Button></Button>}
+          // options={{ closeOnClick: true }}
         >
           {/* USER SIDENAV SECTION */}
-          <SideNavItem className="user" userView
+          <SideNavItem userView
             user={{
-              //image: '#!',
-              name: "John Doe",
-              email: "johndoe@email.com"
+              background: "https://media.istockphoto.com/photos/abstract-blue-background-picture-id875762470?k=6&m=875762470&s=612x612&w=0&h=FYhQuC9CZlxOZW-rAkEvQ0jq1onsY18bUN9a2HBQd3k=",
+              image: this.state.userImage,
+              name: this.state.author,
+              email: this.state.authorEmail
             }}
           />
+          {/* <SideNavItem>{this.state.author}</SideNavItem>
+          <SideNavItem>{this.state.userID}</SideNavItem> */}
+          <SideNavItem>
+            <button onClick={this.props.auth.logout}>Logout</button>
+          </SideNavItem>
           <SideNavItem subheader>Filters</SideNavItem>
           {/* FILTER FOR GENDER */}
           {/* FILTER DATE */}
           <Row>
-          <SideNavItem >
-            <Input s={12} label='Date Selector' name='on' type='date' onChange={function (e, value) { }} />
-          </SideNavItem>
+            <SideNavItem >
+              <Input s={12} label='Date Selector' name='on' type='date' onChange={function (e, value) { }} />
+            </SideNavItem>
           </Row>
           <SideNavItem>
-            <Input name='coed' type='checkbox' value='coed' label='Co-Ed' defaultChecked='checked'/>
+            <Input name='coed' type='checkbox' value='coed' label='Co-Ed' defaultChecked='checked' />
           </SideNavItem>
           <SideNavItem>
             <Input name='male' type='checkbox' value='male' label='Male Only' />
           </SideNavItem>
           <SideNavItem>
-          <Input name='female' type='checkbox' value='female' label='Female Only' />
+            <Input name='female' type='checkbox' value='female' label='Female Only' />
           </SideNavItem>
           <br></br>
           {/* FILTER SPORT-AUTOPOPULATE FROM DB */}
@@ -201,12 +224,12 @@ class Games extends Component {
               </Input>
             </Row>
           </SideNavItem>
-         
+
           <br></br>
           <SideNavItem divider />
           <br></br>
           {/* DROP DOWN UPCOMING GAMES */}
-          
+
           <Collapsible>
             <Badge>4</Badge>
             <CollapsibleItem header='Upcoming Games' icon='arrow_drop_down'>
@@ -502,12 +525,19 @@ class Games extends Component {
           </Collapsible>
 
           <br></br>
-{/* NEW GAME BUTTON MODAL POPUP */}
+          {/* NEW GAME BUTTON MODAL POPUP */}
           <SideNavItem className='center' >
-            <Modal 
+            <Modal
               header='New Game'
               trigger={<Button>Create Game</Button>}>
               <Row>
+                <Input
+                  s={6}
+                  value={this.state.title}
+                  onChange={this.handleInputChange}
+                  name="title"
+                  placeholder="Title (required)"
+                />
                 <Input s={6}
                   value={this.state.author}
                   onChange={this.handleInputChange}
@@ -520,38 +550,45 @@ class Games extends Component {
                   name="authorEmail"
                   placeholder="Player Email (required)"
                 />
-                {/* <Input
-                value={this.state.sport}
-                onChange={this.handleInputChange}
-                name="sport"
-                placeholder="Sport (required)"
-              /> */}
+                <Input
+                  label="Select Sport"
+                  value={this.state.sport}
+                  onChange={this.handleInputChange}
+                  name="sport"
+                  placeholder="Sport (required)"
+                />
                 <Row>
-                  <Input s={9} type='select' label="Select Sport" onChange={this.handleInputChange}>
+                  {/* <Input s={9} 
+                    type='select' 
+                    label="Select Sport" 
+                    onChange={this.handleInputChange}>
                     <option value='1'>Sport 1</option>
                     <option value='2'>Sport 2</option>
                     <option value='3'>Sport 3</option>
-                  </Input>
+                  </Input> */}
                   <Input
                     value={this.state.playerNumber}
                     onChange={this.handleInputChange}
                     name="playerNumber"
                     placeholder="Number of Players"
+                    type="number"
                   />
                 </Row>
 
                 <Input
-                  //value={this.state.date}
-                  //onChange={this.handleInputChange}
-                  //name="date"
+                  value={this.state.date}
+                  onChange={this.handleInputChange}
+                  name="date"
                   placeholder="Date (required)"
-                  name='on' type='date' onChange={function (e, value) { }} />
+                  type='date'
+                />
                 <Input
-                  //value={this.state.time}
-                  //onChange={this.handleInputChange}
-                  //name="time"
+                  value={this.state.time}
+                  onChange={this.handleInputChange}
+                  name="time"
                   placeholder="Time"
-                  name='on' type='time' onChange={function (e, value) { }} />
+                  type='time'
+                />
 
                 <Input
                   value={this.state.city}
@@ -565,21 +602,34 @@ class Games extends Component {
                   name="state"
                   placeholder="State"
                 />
-                <Row s={4} offset='s4'><Input
-                  value={this.state.gender}
-                  onChange={this.handleInputChange}
-                  name="gender"
-                  type='checkbox' label='CoEd' defaultValue='checked' />
+                <Row s={4} offset='s4'>
                   <Input
                     value={this.state.gender}
                     onChange={this.handleInputChange}
                     name="gender"
-                    type='checkbox' label='Male Only' />
+                    placeholder="Gender"
+                  />
+                  {/* <Input
+                    value={this.state.gender}
+                    onChange={this.handleInputChange}
+                    name="gender"
+                    type='checkbox'
+                    label='CoEd'
+                    defaultValue='checked'
+                  />
                   <Input
                     value={this.state.gender}
                     onChange={this.handleInputChange}
                     name="gender"
-                    type='checkbox' label='Female Only' /></Row>
+                    type='checkbox'
+                    label='Male Only'
+                  />
+                  <Input
+                    value={this.state.gender}
+                    onChange={this.handleInputChange}
+                    name="gender"
+                    type='checkbox' label='Female Only' />*/}
+                </Row>
                 <TextArea
                   value={this.state.description}
                   onChange={this.handleInputChange}
@@ -593,11 +643,10 @@ class Games extends Component {
                   Submit Event
               </FormBtn>
               </Row>
-
-            </Modal></SideNavItem>
-
+            </Modal>
+          </SideNavItem>
         </SideNav>
-        
+
       </Row>
     );
   }
