@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Row, Col, Navbar, Button} from 'react-materialize';
+import {Row, Col, Navbar} from 'react-materialize';
 
 
 export default class NotFound extends Component {

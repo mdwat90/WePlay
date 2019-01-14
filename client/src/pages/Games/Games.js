@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import "../../components/SideNav/SideNav.css"
+import "../../components/SideNav/SideNav.css";
 import DeleteBtn from "../../components/DeleteBtn";
 //import { List, ListItem } from "../../components/List";
 import API from "../../utils/API";
-import {List, ListItem} from "../../components/List"
+//import {List, ListItem} from "../../components/List"
 import { TextArea, FormBtn } from "../../components/Form";
 import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
 //let uId = '5c15564ef0adbf8c0fbab4a7'
@@ -128,7 +128,7 @@ class Games extends Component {
 
       <Row>
         <Col s={8} offset='s4'>
-          <Navbar className="cyan darken-3 center">
+          <Navbar className="blue-grey darken-1 center">
             <h4>WePlay</h4>
             <NavItem>
             </NavItem>
@@ -139,14 +139,13 @@ class Games extends Component {
           <h3 className="center">Current Games</h3>
 
           {this.state.games.length ? (
-            <List>
-              
-              {this.state.games.map(game => {
-                return (
-                  <ListItem key={game._id}>
+            <Collapsible popout defaultActiveKey={1}>
+            {this.state.games.map(game => {
+                 return (
+            <CollapsibleItem key={game._id} header={game.title} icon="add">
                     <a href={"/games/" + game._id}>
                       <strong>
-                        {game.title} by {game.author}
+                        by {game.author}
                       </strong>
                     </a>
                     <h6>Sport: {game.sport}</h6>
@@ -155,11 +154,32 @@ class Games extends Component {
                     <h6>Location: {game.city}, {game.state}</h6>
                     <h6>Male/Female/Co-ed: {game.gender}</h6>
                     <h6>Description: {game.description}</h6>
-                    <DeleteBtn onClick={() => this.deleteGame(game._id)} />
-                  </ListItem>
-                );
-              })}
-            </List>
+                    <DeleteBtn onClick={() => this.deleteGame(game._id)}></DeleteBtn>
+            </CollapsibleItem>
+                 );
+          })}
+          </Collapsible>
+            // <List>
+              
+            //   {this.state.games.map(game => {
+            //     return (
+            //       <ListItem key={game._id}>
+            //         <a href={"/games/" + game._id}>
+            //           <strong>
+            //             {game.title} by {game.author}
+            //           </strong>
+            //         </a>
+            //         <h6>Sport: {game.sport}</h6>
+            //         <h6>Email: {game.authorEmail}</h6>
+            //         <h6># of Players: {game.playerNumber}</h6>
+            //         <h6>Location: {game.city}, {game.state}</h6>
+            //         <h6>Male/Female/Co-ed: {game.gender}</h6>
+            //         <h6>Description: {game.description}</h6>
+            //         <DeleteBtn onClick={() => this.deleteGame(game._id)} />
+            //       </ListItem>
+            //     );
+            //   })}
+            // </List>
           ) : (
               <h5 className="center">No Results to Display</h5>
             )}
@@ -171,19 +191,16 @@ class Games extends Component {
           // options={{ closeOnClick: true }}
         >
           {/* USER SIDENAV SECTION */}
-          <SideNavItem userView s={12}
+          {/* "https://media.istockphoto.com/photos/abstract-blue-background-picture-id875762470?k=6&m=875762470&s=612x612&w=0&h=FYhQuC9CZlxOZW-rAkEvQ0jq1onsY18bUN9a2HBQd3k=" */}
+          <SideNavItem userView className="blue-grey darken-1"
             user={{
-              background: "https://media.istockphoto.com/photos/abstract-blue-background-picture-id875762470?k=6&m=875762470&s=612x612&w=0&h=FYhQuC9CZlxOZW-rAkEvQ0jq1onsY18bUN9a2HBQd3k=",
               image: this.state.userImage,
               name: this.state.author,
               email: this.state.authorEmail
             }}
           />
-          {/* <SideNavItem>{this.state.author}</SideNavItem>
-          <SideNavItem>{this.state.userID}</SideNavItem> */}
-          <SideNavItem>
-            <Button onClick={this.props.auth.logout}>Logout</Button>
-          </SideNavItem>
+         
+         
           <SideNavItem subheader>Filters</SideNavItem>
           {/* FILTER FOR GENDER */}
           {/* FILTER DATE */}
@@ -235,25 +252,33 @@ class Games extends Component {
             <CollapsibleItem header='Upcoming Games' icon='arrow_drop_down'>
               <Collection>
                 {/* THIS WILL DISPLAY 4 UPCOMING GAMES */}
-                <CollectionItem>
+                {this.state.games.map(game => {
+                 return (
+                <CollectionItem key={game._id} header={game.title} >
                   <Modal
-                    header='Tennis'
-                    trigger={<Button className="white" flat waves="teal">Tennis</Button>}>
-                    <Table>
+                    header={game.title}
+                    trigger={<Button className="white" flat waves="teal">{game.title}</Button>}>
+                    <Table centered>
                       <thead>
                         <tr>
                           <th data-field="id">Sport</th>
-                          <th data-field="name">Location</th>
-                          <th data-field="price">Date</th>
-                          <th data-field="price">Time</th>
+                          <th data-field="location">Location</th>
+                          <th data-field="date">Date</th>
+                          <th data-field="time">Time</th>
+                          <th data-field="players">Num. of Players</th>
+                          <th data-field="gender">Gender</th>
+                          <th data-field="author">Author</th>
                         </tr>
-                      </thead>
-                      <tbody>
+                        </thead>
+                        <tbody>
                         <tr>
-                          <td>Tennis</td>
-                          <td>Denver</td>
-                          <td>January 26, 2019</td>
-                          <td>2:00pm</td>
+                        <td>{game.sport}</td>
+                          <td>{game.city}, {game.state}</td>
+                          <td>{game.date}</td>
+                          <td>{game.time}</td>
+                          <td>{game.playerNumber}</td>
+                          <td>{game.gender}</td>
+                          <td><Button flat>{game.author}</Button></td>
                         </tr>
                       </tbody>
                       <thead>
@@ -263,116 +288,15 @@ class Games extends Component {
                       </thead>
                       <tbody>
                         <tr>
-                          <td>SPORTS GAME DESCRIPTION</td>
+                          <td>{game.description}</td>
                         </tr>
                       </tbody>
 
                     </Table>
                   </Modal>
                 </CollectionItem>
-                {/* THIS WILL AUTO POPULATE FROM DB */}
-                <CollectionItem >
-                  <Modal
-                    header='Football'
-                    trigger={<Button className="white" flat waves="teal">Football</Button>}>
-                    <Table>
-                      <thead>
-                        <tr>
-                          <th data-field="id">Sport</th>
-                          <th data-field="name">Location</th>
-                          <th data-field="price">Date</th>
-                          <th data-field="price">Time</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Football</td>
-                          <td>Denver</td>
-                          <td>January 26, 2019</td>
-                          <td>2:00pm</td>
-                        </tr>
-                      </tbody>
-                      <thead>
-                        <tr>
-                          <th data-field="id">Descripton</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>SPORTS GAME DESCRIPTION</td>
-                        </tr>
-                      </tbody>
-
-                    </Table>
-                  </Modal>
-                </CollectionItem>
-                <CollectionItem > <Modal
-                  header='Game'
-                  trigger={<Button className="white" flat waves="teal">Game</Button>}>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Sport</th>
-                        <th data-field="name">Location</th>
-                        <th data-field="price">Date</th>
-                        <th data-field="price">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Game</td>
-                        <td>Denver</td>
-                        <td>January 26, 2019</td>
-                        <td>2:00pm</td>
-                      </tr>
-                    </tbody>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Descripton</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>SPORTS GAME DESCRIPTION</td>
-                      </tr>
-                    </tbody>
-
-                  </Table>
-                </Modal></CollectionItem>
-                <CollectionItem> <Modal
-                  header='Soccer'
-                  trigger={<Button className="white" flat waves="teal">Soccer</Button>}>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Sport</th>
-                        <th data-field="name">Location</th>
-                        <th data-field="price">Date</th>
-                        <th data-field="price">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Soccer</td>
-                        <td>Denver</td>
-                        <td>January 26, 2019</td>
-                        <td>2:00pm</td>
-                      </tr>
-                    </tbody>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Descripton</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>SPORTS GAME DESCRIPTION</td>
-                      </tr>
-                    </tbody>
-
-                  </Table>
-                </Modal>
-                </CollectionItem>
+                        );
+                      })}
               </Collection>
             </CollapsibleItem>
 
@@ -529,7 +453,7 @@ class Games extends Component {
           <SideNavItem className='center' >
             <Modal
               header='New Game'
-              trigger={<Button>Create Game</Button>}>
+              trigger={<Button className="teal darken-4">Create Game</Button>}>
               <Row>
                 <Input
                   s={6}
@@ -644,6 +568,9 @@ class Games extends Component {
               </FormBtn>
               </Row>
             </Modal>
+          </SideNavItem>
+          <SideNavItem className='center'>
+            <Button onClick={this.props.auth.logout} className="teal darken-4">Logout</Button>
           </SideNavItem>
         </SideNav>
         </Col>
