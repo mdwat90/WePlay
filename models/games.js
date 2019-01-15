@@ -14,6 +14,7 @@ const gameSchema = new Schema({
   authorEmail: String,
   author: String,
   authorId: String,
+  authorPhoto: Schema.Types.Mixed,
   players: Schema.Types.Mixed,
 });
 
