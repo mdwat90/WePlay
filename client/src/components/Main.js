@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 
 export default class Main extends Component {
+   componentDidMount(){
+       this.props.auth.login();
+   }
+
     render() {
+       
         return (
             <div>
-            <p className="App-intro">
+            {/* <p className="App-intro">
                 Hello {this.props.name}!
                 email {this.props.useremail}
                 id {this.props.userID}
@@ -13,13 +18,14 @@ export default class Main extends Component {
             </p>
             {!this.props.auth.isAuthenticated() &&
 
-            <div>
+            (<div>
                 <h1>
                     Please login first
                 </h1>
                 <button onClick={this.props.auth.login}>Login</button>
-            </div>
-            }
+            </div>) 
+            } */}
+           
             </div >
         )
     }

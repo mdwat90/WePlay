@@ -2,8 +2,12 @@
 import auth0 from "auth0-js";
 import jwtDecode from "jwt-decode";
 
-const LOGIN_SUCCESS_PAGE= "/secret";
+const LOGIN_SUCCESS_PAGE= "/";
+
+//TODO: make a component for login failure page
 const LOGIN_FAILURE_PAGE= "/";
+const LOGOUT_SUCCESS= "/logout"
+
 
 export default class Auth {
     auth0 = new auth0.WebAuth({
@@ -24,6 +28,7 @@ export default class Auth {
     }
 
     handleAuthentication() {
+      
         this.auth0.parseHash((err, authResults) => {
             if (authResults && authResults.accessToken && authResults.idToken) {
                 let expiresAt = JSON.stringify((authResults.expiresIn) * 1000 + new Date().getTime());
@@ -48,7 +53,7 @@ export default class Auth {
         localStorage.removeItem("access_token");
         localStorage.removeItem("id_token");
         localStorage.removeItem("expires_at");
-        location.pathname = LOGIN_FAILURE_PAGE;
+        location.pathname = LOGOUT_SUCCESS;
     }
 
     getProfile() {
