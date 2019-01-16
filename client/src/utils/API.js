@@ -25,8 +25,6 @@ export default {
   // Saves a player to the game
   updateGame: function (id, userData) {
     console.log("addPlayer firing in the API client side")
-    console.log(id)
-    console.log(userData)
     return axios.put("/api/games/" + id, userData);
   },
   // Saves a book to the database

@@ -23,11 +23,7 @@ export default class Main extends Component {
             </div>
             }
             <p className="App-intro center">
-                Hello{this.props.name}!
-                {this.props.useremail}
-                {this.props.userID}
-    
-            {" "}Looking for WePlay? <a href="/secret">click here</a>
+                Hello {this.props.name}! {" "} Looking for WePlay? <a href="/secret">click here</a>
             </p>
            
             </Col>

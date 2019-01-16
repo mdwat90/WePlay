@@ -18,7 +18,7 @@ export default class NotFound extends Component {
                 {this.props.useremail}
                 {this.props.userID}
     
-            {" "}Looking for WePlay? <a href="/">click here</a>
+            {" "} Looking for WePlay? <a href="/">click here</a>
             </p>
             </Col>
         </Row>
