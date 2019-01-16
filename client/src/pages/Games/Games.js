@@ -4,7 +4,7 @@ import DeleteBtn from "../../components/DeleteBtn";
 import API from "../../utils/API";
 import {List, ListItem} from "../../components/List";
 import { TextArea, FormBtn } from "../../components/Form";
-import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table, Chip, Tag } from 'react-materialize';
+import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table, Chip } from 'react-materialize';
 import Geocode from "react-geocode";
 import SimpleMap from "../../components/GoogleMaps/google-maps"
 
@@ -27,6 +27,7 @@ class Games extends Component {
     emailToWho: "",
     userImage: this.props.userImage,
     userID: this.props.userID,
+    emailMessageContent: ""
   };
 
   //When the component mounts, load all books and save them to this.state.books
@@ -138,7 +139,8 @@ class Games extends Component {
   sendMail = () => {
     console.log("sendMail hit on games.js")
     API.sendMail({
-      emailToWho: this.state.emailToWho
+      emailToWho: this.state.emailToWho,
+      emailMessageContent: this.state.emailMessageContent
     })
   }
 
@@ -226,21 +228,47 @@ class Games extends Component {
                           <p>Location</p>
                         </Col>
                         <Col s={3}>
-                          <Modal
-                            header='Contact Event Author'
-                            trigger={<i className="material-icons">email</i>}>
+                        <Modal
+                          header='Contact Event Author'
+                          trigger={<i className="material-icons">email</i>}>
+                          <Row>
                             <Row>
-                                <Row>
-                                <Input placeholder="Your Name" s={12} label={this.state.userID} />
-                                </Row>
-                                <Row>
-                                  <Input placeholder="Input message here" s={12} type='textarea' />
-                                </Row>
-                                <Row className='center'>
-                                  <Button>Send</Button>
-                                </Row>
+                              <Input
+                                s={6}
+                                label="From"
+                                value={this.state.userID}
+                                onChange={this.handleInputChange}
+                                name="title"
+                                placeholder="From"
+                              />
+                              <Input
+                                s={6}
+                                label="Message To"
+                                value={this.state.emailToWho}
+                                onChange={this.handleInputChange}
+                                name="emailToWho"
+                                placeholder={game.authorEmail}
+                                type="email"
+                              />
+
                             </Row>
-                          </Modal>
+                            <Row>
+                              <Input 
+                              s={12} 
+                              label= "Message"
+                              value={this.state.emailMessageContent}
+                              onChange={this.handleInputChange}
+                              name="emailMessageContent"
+                              placeholder="So excited for the volleyball game. Where is the exact location?" 
+                              type='textarea' 
+                              />
+                            </Row>
+                            <Row className='center'>
+                              <Button className="modal-close" onClick={this.sendMail}>Send</Button>
+
+                            </Row>
+                          </Row>
+                        </Modal>
                           <p>Contact</p>
                         </Col>
                         <Col s={3}>
@@ -256,7 +284,7 @@ class Games extends Component {
                                     <Input placeholder="Input message here" s={12} type='textarea' />
                                   </Row>
                                   <Row className='center'>
-                                    <Button>Share</Button>
+                                    <Button className="modal-close">Share</Button>
                                   </Row>
                               </Row>
                             </Modal>
@@ -751,11 +779,12 @@ class Games extends Component {
                   value={this.state.description}
                   onChange={this.handleInputChange}
                   name="descrition"
-                  placeholder="Descripton (Optional)"
+                  placeholder="Description (Optional)"
                 />
                 <FormBtn
                   disabled={!(this.state.author && this.state.title)}
                   onClick={this.handleFormSubmit}
+                  className="modal-close"
                 >
                   Submit Event
               </FormBtn>
