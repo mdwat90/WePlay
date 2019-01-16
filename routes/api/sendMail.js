@@ -13,7 +13,7 @@ router.post("/", (req, res) => {
         from: 'weplayapp1@gmail.com',
         to: emailToWho,
         subject: 'Message from WePlay',
-        html: '<card><h1>Welcome</h1><p>' + emailMessageContent + '</p><a href="mailto:' + emailToWho + '"><button>You could click here</button></a></card>'
+        html: '<card><h1>Welcome</h1><p>' + emailMessageContent + '</p><a href="mailto:' + emailToWho + '"><button>Reply</button></a></card>'
     };
 
     console.log(mailOptions);
