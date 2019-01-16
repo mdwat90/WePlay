@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "../../components/SideNav/SideNav.css";
-import DeleteBtn from "../../components/DeleteBtn";
+//import DeleteBtn from "../../components/DeleteBtn";
 import API from "../../utils/API";
 
-//import {List, ListItem} from "../../components/List"
+import {List, ListItem} from "../../components/List"
 import { FormBtn } from "../../components/Form";
-import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
+import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Input, Button, Table, Chip } from 'react-materialize';
 //let uId = '5c15564ef0adbf8c0fbab4a7'
 
 // function to retrieve userId
