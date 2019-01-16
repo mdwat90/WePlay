@@ -4,7 +4,7 @@ import DeleteBtn from "../../components/DeleteBtn";
 //import { List, ListItem } from "../../components/List";
 import API from "../../utils/API";
 //import {List, ListItem} from "../../components/List"
-import { TextArea, FormBtn } from "../../components/Form";
+import { FormBtn } from "../../components/Form";
 import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table } from 'react-materialize';
 //let uId = '5c15564ef0adbf8c0fbab4a7'
 
@@ -83,6 +83,12 @@ class Games extends Component {
       .catch(err => console.log(err));
   };
 
+  cityList = city => {
+    console.log("gather all cities from db");
+    API.findByCity(city)
+    .then(console.log("cities"))
+  };
+
   // Handles updating component state when the user types into the input field
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -111,6 +117,7 @@ class Games extends Component {
         authorId: this.state.userID,
       })
         .then(res => this.loadGames())
+        .then()
         .catch(err => console.log(err));
     }
   };
@@ -127,8 +134,8 @@ class Games extends Component {
     return (
 
       <Row>
-        <Col s={8} offset='s4'>
-          <Navbar className="blue-grey darken-1 center">
+        <Col s={8} offset="s4">
+          <Navbar className="cyan darken-3 center">
             <h4>WePlay</h4>
             <NavItem>
             </NavItem>
@@ -191,8 +198,7 @@ class Games extends Component {
           // options={{ closeOnClick: true }}
         >
           {/* USER SIDENAV SECTION */}
-          {/* "https://media.istockphoto.com/photos/abstract-blue-background-picture-id875762470?k=6&m=875762470&s=612x612&w=0&h=FYhQuC9CZlxOZW-rAkEvQ0jq1onsY18bUN9a2HBQd3k=" */}
-          <SideNavItem userView className="blue-grey darken-1"
+          <SideNavItem userView className="cyan darken-3"
             user={{
               image: this.state.userImage,
               name: this.state.author,
@@ -200,45 +206,138 @@ class Games extends Component {
             }}
           />
          
-         
+          {/* NEW GAME BUTTON MODAL POPUP */}
+          <SideNavItem>
+            <Modal className="newGameModal"
+              header='Create New Game'
+              fixedFooter
+              bottomSheet
+              trigger={<Button className="cyan darken-3">Create New Game</Button>}>
+              <Row>
+              <Input s={4}
+                  value={this.state.author}
+                  onChange={this.handleInputChange}
+                  name="author"
+                  placeholder="Player Name(required)"
+                />
+                <Input s={8}
+                  value={this.state.authorEmail}
+                  onChange={this.handleInputChange}
+                  name="authorEmail"
+                  placeholder="Player Email (required)"
+                />
+                <Input
+                  s={12}
+                  value={this.state.title}
+                  onChange={this.handleInputChange}
+                  name="title"
+                  placeholder="Event Title (required)"
+                />
+                <Input s={6}
+                  label="Sport"
+                  value={this.state.sport}
+                  onChange={this.handleInputChange}
+                  name="sport"
+                  placeholder="Sport (required)"
+                />
+                
+                  <Input s={2} offset="s10"
+                    value={this.state.playerNumber}
+                    onChange={this.handleInputChange}
+                    name="playerNumber"
+                    placeholder="Number of Players"
+                    type="number"
+                  />
+                
+                <Row >
+                  <Input s={2} offset="s10"  name="gender" type='checkbox' onChange={this.handleInputChange} value={this.state.gender} defaultChecked="checked" label='Co-Ed'/>
+                  <Input name="gender" type='checkbox' onChange={this.handleInputChange} value={this.state.gender} label='Male Only' />
+                  <Input name="gender" type='checkbox' onChange={this.handleInputChange} value={this.state.gender} label='Female Only' />
+                  </Row>
+
+                <Input className="center" s={3} offset="s10" 
+                  value={this.state.date}
+                  onChange={this.handleInputChange}
+                  name="date"
+                  placeholder="Date (required)"
+                  type='date'
+                />
+                <Input className="center" s={3} offset="s10" 
+                  value={this.state.time}
+                  onChange={this.handleInputChange}
+                  name="time"
+                  placeholder="Time"
+                  type='time'
+                />
+            
+                <Input className="center" s={3} offset="s10" 
+                  value={this.state.city}
+                  onChange={this.handleInputChange}
+                  name="city"
+                  placeholder="City"
+                />
+                <Row>
+                <Input className="center" s={1} offset="s8"
+                  value={this.state.state}
+                  onChange={this.handleInputChange}
+                  name="state"
+                  placeholder="State"
+                />
+                </Row>
+                <Row>
+                <Input className="center" s={10}
+                  value={this.state.description}
+                  onChange={this.handleInputChange}
+                  name="description"
+                  placeholder="Descripton (Optional)"
+                  type="textarea"
+                />
+                </Row>
+                <Row>
+                <FormBtn className="center"
+                  disabled={!(this.state.author && this.state.title)}
+                  onClick={this.handleFormSubmit}
+                >
+                  Create
+              </FormBtn>
+              </Row>
+              </Row>
+            </Modal>
+          </SideNavItem>
           <SideNavItem subheader>Filters</SideNavItem>
           {/* FILTER FOR GENDER */}
           {/* FILTER DATE */}
-          <Row>
+          
             <SideNavItem >
               <Input s={12} label='Date Selector' name='on' type='date' onChange={function (e, value) { }} />
-            </SideNavItem>
-          </Row>
-          <SideNavItem>
-            <Input name='coed' type='checkbox' value='coed' label='Co-Ed' defaultChecked='checked' />
-          </SideNavItem>
-          <SideNavItem>
-            <Input name='male' type='checkbox' value='male' label='Male Only' />
-          </SideNavItem>
-          <SideNavItem>
-            <Input name='female' type='checkbox' value='female' label='Female Only' />
+              <Input  name="gender" type='checkbox' onChange={this.handleInputChange} value={this.state.gender} defaultChecked="checked" label='Co-Ed'/>
+                  <Input name="gender" type='checkbox' onChange={this.handleInputChange} value={this.state.gender} label='Male Only' />
+                  <Input name="gender" type='checkbox' onChange={this.handleInputChange} value={this.state.gender} label='Female Only' />
           </SideNavItem>
           <br></br>
           {/* FILTER SPORT-AUTOPOPULATE FROM DB */}
           <SideNavItem>
             <Row>
               <Input s={12} type='select' label="Select Sport">
-                <option value='all'>All</option>
-                <option value='1'>Soccer</option>
-                <option value='2'>Tennis</option>
-                <option value='3'>Football</option>
+              {this.state.games.map(game => {
+                 return ( 
+                <option value={game.sport}>{game.sport}</option>
+                );
+              })}
               </Input>
             </Row>
           </SideNavItem>
           {/* FILTER LOCATION- AUTOPOPULATE FROM DB */}
           <SideNavItem>
+          
             <Row>
-              <Input s={12} type='select' label="Select Loation">
-                <option value='all'>All</option>
-                <option value='1'>Denver</option>
-                <option value='2'>Centennial</option>
-                <option value='3'>Aurora</option>
-              </Input>
+              <Input s={12} type='select' label="Select Location" >
+              {this.state.games.map(game => {
+                 return ( 
+                <option key={game.city}>{game.city}</option>
+                );
+              })}
+            </Input>
             </Row>
           </SideNavItem>
 
@@ -248,7 +347,8 @@ class Games extends Component {
           {/* DROP DOWN UPCOMING GAMES */}
 
           <Collapsible>
-            <Badge>4</Badge>
+            
+            {/* <Badge>4</Badge> */}
             <CollapsibleItem header='Upcoming Games' icon='arrow_drop_down'>
               <Collection>
                 {/* THIS WILL DISPLAY 4 UPCOMING GAMES */}
@@ -278,7 +378,7 @@ class Games extends Component {
                           <td>{game.time}</td>
                           <td>{game.playerNumber}</td>
                           <td>{game.gender}</td>
-                          <td><Button flat>{game.author}</Button></td>
+                          <td><Button flat onClick={() => this.sendMail(game.authorEmail)}>{game.author}</Button></td>
                         </tr>
                       </tbody>
                       <thead>
@@ -301,7 +401,7 @@ class Games extends Component {
             </CollapsibleItem>
 
             <br></br>
-            {/* DROP DOWN OF GAMES CREATE */}
+            {/* DROP DOWN OF GAMES CREATED */}
             <CollapsibleItem header='Created Games' icon="arrow_drop_down">
               <Collection>
                 {/* SHOWS 4 CREATED GAMES-NEWEST CREATED LISTED FIRST */}
@@ -449,126 +549,7 @@ class Games extends Component {
           </Collapsible>
 
           <br></br>
-          {/* NEW GAME BUTTON MODAL POPUP */}
-          <SideNavItem className='center' >
-            <Modal
-              header='New Game'
-              trigger={<Button className="teal darken-4">Create Game</Button>}>
-              <Row>
-                <Input
-                  s={6}
-                  value={this.state.title}
-                  onChange={this.handleInputChange}
-                  name="title"
-                  placeholder="Title (required)"
-                />
-                <Input s={6}
-                  value={this.state.author}
-                  onChange={this.handleInputChange}
-                  name="author"
-                  placeholder="Player Name(required)"
-                />
-                <Input s={6}
-                  value={this.state.authorEmail}
-                  onChange={this.handleInputChange}
-                  name="authorEmail"
-                  placeholder="Player Email (required)"
-                />
-                <Input
-                  label="Select Sport"
-                  value={this.state.sport}
-                  onChange={this.handleInputChange}
-                  name="sport"
-                  placeholder="Sport (required)"
-                />
-                <Row>
-                  {/* <Input s={9} 
-                    type='select' 
-                    label="Select Sport" 
-                    onChange={this.handleInputChange}>
-                    <option value='1'>Sport 1</option>
-                    <option value='2'>Sport 2</option>
-                    <option value='3'>Sport 3</option>
-                  </Input> */}
-                  <Input
-                    value={this.state.playerNumber}
-                    onChange={this.handleInputChange}
-                    name="playerNumber"
-                    placeholder="Number of Players"
-                    type="number"
-                  />
-                </Row>
-
-                <Input
-                  value={this.state.date}
-                  onChange={this.handleInputChange}
-                  name="date"
-                  placeholder="Date (required)"
-                  type='date'
-                />
-                <Input
-                  value={this.state.time}
-                  onChange={this.handleInputChange}
-                  name="time"
-                  placeholder="Time"
-                  type='time'
-                />
-
-                <Input
-                  value={this.state.city}
-                  onChange={this.handleInputChange}
-                  name="city"
-                  placeholder="City"
-                />
-                <Input
-                  value={this.state.state}
-                  onChange={this.handleInputChange}
-                  name="state"
-                  placeholder="State"
-                />
-                <Row s={4} offset='s4'>
-                  <Input
-                    value={this.state.gender}
-                    onChange={this.handleInputChange}
-                    name="gender"
-                    placeholder="Gender"
-                  />
-                  {/* <Input
-                    value={this.state.gender}
-                    onChange={this.handleInputChange}
-                    name="gender"
-                    type='checkbox'
-                    label='CoEd'
-                    defaultValue='checked'
-                  />
-                  <Input
-                    value={this.state.gender}
-                    onChange={this.handleInputChange}
-                    name="gender"
-                    type='checkbox'
-                    label='Male Only'
-                  />
-                  <Input
-                    value={this.state.gender}
-                    onChange={this.handleInputChange}
-                    name="gender"
-                    type='checkbox' label='Female Only' />*/}
-                </Row>
-                <TextArea
-                  value={this.state.description}
-                  onChange={this.handleInputChange}
-                  name="descrition"
-                  placeholder="Descripton (Optional)"
-                />
-                <FormBtn
-                  disabled={!(this.state.author && this.state.title)}
-                  onClick={this.handleFormSubmit}
-                >
-                  Submit Event
-              </FormBtn>
-              </Row>
-            </Modal>
-          </SideNavItem>
+         
           <SideNavItem className='center'>
             <Button onClick={this.props.auth.logout} className="teal darken-4">Logout</Button>
           </SideNavItem>
