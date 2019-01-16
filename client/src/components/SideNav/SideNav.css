@@ -1,4 +1,12 @@
-.sideNav{
-    padding-right: 40rem;
-    
+*{
+    font-family: 'Abel', sans-serif;
+    font-size: 24px
+}
+.side-nav{
+    width: 32rem;
+    /* background-color: rgb(243, 237, 230); */
+}
+
+.userSide{
+    background-color: rgba(53, 131, 143, 0.747);
 }
