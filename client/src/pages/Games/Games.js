@@ -25,6 +25,7 @@ class Games extends Component {
     state: "",
     description: "",
     emailToWho: "",
+    players: [],
     userImage: this.props.userImage,
     userID: this.props.userID,
   };
@@ -84,6 +85,7 @@ class Games extends Component {
     console.log("Player added to game")
     console.log(id)
     console.log(userData)
+
     API.updateGame(id, userData)
       .then(res => this.loadGames())
       .catch(err => console.log(err.response));
@@ -208,6 +210,11 @@ class Games extends Component {
                                     <img src={game.authorPhoto} alt='UserImage' />
                                     {game.author}
                                   </Chip>
+                                  {/* <Chip>
+                                    <img src={game.players[1]} alt='UserImage' />
+                                    {game.players[0]}
+                                  </Chip> */}
+                                  
                                 </Col>
                               </Row>
                             </Modal>
@@ -266,12 +273,13 @@ class Games extends Component {
                       
                       <Row className='center joinBtn'>
                       <Button waves='light' id={game._id}
-                        onClick={() => this.updateGame(game._id, [this.props.userID, this.props.userImage])}
+                        onClick={() => this.updateGame(game._id, {email: 'luke.karlovich@email.com', photo:'photo'})}
+                        // onClick={() => this.updateGame(game._id, [this.props.userID, this.props.userImage])}
                         // disabled={}
                         >
                           Join!
                         </Button>
-                        {/* <DeleteBtn onClick={() => this.deleteGame(game._id)} /> */}
+                        <DeleteBtn onClick={() => this.deleteGame(game._id)} />
                       </Row>
                     </ListItem>
                 );

@@ -29,7 +29,7 @@ module.exports = {
   },
   update: function(req, res) {
     db.Game
-      .findOneAndUpdate({ _id: req.params.id}, {players: req.body, $inc: { playerNumber: -1}})
+      .update({ _id: req.params.id}, {$push: {players: [req.body]}, $inc: { playerNumber: -1}})
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
