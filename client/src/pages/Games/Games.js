@@ -33,6 +33,7 @@ class Games extends Component {
   componentDidMount() {
     this.loadGames();
     this.loadUser(this.state.userID);
+    Geocode.setApiKey("AIzaSyBFxBvSfL6-CmTt4k6mtU03hLHt9OJgHuI");
   }
 
   // Loads all books and sets them to this.state.books
@@ -81,9 +82,6 @@ class Games extends Component {
   // Deletes a book from the database with a given id, then reloads books from the db
   updateGame = (id, userData) => {
     console.log("Player added to game")
-    // this.setState({
-    //   isButtonDisabled: true
-    // });
     console.log(id)
     console.log(userData)
     API.updateGame(id, userData)
@@ -104,28 +102,36 @@ class Games extends Component {
     console.log(e)
   };
 
+  geocode = (city, state) => {
+    return Geocode.fromAddress(`${city}, ${state}`);
+}
+
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.title && this.state.author) {
-      API.saveGame({
-        title: this.state.title,
-        author: this.state.author,
-        sport: this.state.sport,
-        playerNumber: this.state.playerNumber,
-        date: this.state.date,
-        time:this.state.time,
-        gender: this.state.gender,
-        city: this.state.city,
-        state: this.state.state,
-        description: this.state.description,
-        authorEmail: this.state.authorEmail,
-        authorId: this.state.userID,
-        authorPhoto: this.state.userImage,
-      })
+      this.geocode(this.state.city, this.state.state)
+        .then(res => {
+          let { lat, lng } = res.results[0].geometry.location;
+          API.saveGame({
+            title: this.state.title,
+            author: this.state.author,
+            sport: this.state.sport,
+            playerNumber: this.state.playerNumber,
+            date: this.state.date,
+            time: this.state.time,
+            gender: this.state.gender,
+            lat: lat,
+            lng: lng,
+            description: this.state.description,
+            authorEmail: this.state.authorEmail,
+            authorId: this.state.userID,
+            authorPhoto: this.state.userImage,
+          })
         .then(res => this.loadGames())
         .catch(err => console.log(err));
+      })
     }
   };
 
@@ -134,19 +140,6 @@ class Games extends Component {
     API.sendMail({
       emailToWho: this.state.emailToWho
     })
-  }
-
-  geocode = (city, state) => {
-      Geocode.setApiKey("AIzaSyBFxBvSfL6-CmTt4k6mtU03hLHt9OJgHuI");
-      Geocode.fromAddress(`${city}, ${state}`).then(
-      response => {
-        const { lat, lng } = response.results[0].geometry.location;
-        console.log(lat, lng);
-      },
-      error => {
-        console.error(error);
-      }
-    );
   }
 
   
@@ -199,7 +192,6 @@ class Games extends Component {
                             <td className='center'>{game.date}</td>
                             <td className='center'>{game.time} </td>
                             <td className='center'>{game.gender}</td>
-                            <td className='center'>{game.description}</td>
                           </tr>
                         </tbody>
                       </Table>
@@ -227,8 +219,7 @@ class Games extends Component {
                               trigger={<i className="material-icons">location_on</i>}>
                               <div className='container'>
                                 <Row>
-                                  {/* <Button onClick={() => this.geocode(game.city, game.state)}>Send</Button> */}
-                                  <SimpleMap lat={39.9205411} lng={-105.0866504}></SimpleMap>
+                                  <SimpleMap lat={game.lat} lng={game.lng}></SimpleMap>
                                 </Row>
                               </div>
                             </Modal>
@@ -276,7 +267,7 @@ class Games extends Component {
                       <Row className='center joinBtn'>
                       <Button waves='light' id={game._id}
                         onClick={() => this.updateGame(game._id, [this.props.userID, this.props.userImage])}
-                        // disabled={this.id}
+                        // disabled={}
                         >
                           Join!
                         </Button>
