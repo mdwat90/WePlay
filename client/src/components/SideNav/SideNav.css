@@ -3,7 +3,8 @@
     font-size: 24px
 }
 .side-nav{
-    width: 32rem;
+    width: 33rem;
+    box-shadow: 0px 5px 10px 3px #888888;
     /* background-color: rgb(243, 237, 230); */
 }
 
