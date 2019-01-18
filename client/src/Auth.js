@@ -3,17 +3,23 @@ import auth0 from "auth0-js";
 import jwtDecode from "jwt-decode";
 
 const LOGIN_SUCCESS_PAGE= "/";
-
 //TODO: make a component for login failure page
 const LOGIN_FAILURE_PAGE= "/";
 const LOGOUT_SUCCESS= "/logout"
+let redirectUri;
+
+if (process.env.NODE_ENV === "production") {
+    redirectUri = "https://fierce-plains-86705.herokuapp.com/callback"
+  } else {
+      redirectUri = "http://localhost:3000/callback"
+  }
 
 
 export default class Auth {
     auth0 = new auth0.WebAuth({
         domain: "lukekarlovich.auth0.com",
         clientID: "UiGy0GN2jp57kvGn44xzBjLwLfYJUByq",
-        redirectedURI: "http://127.0.0.1:3000/callback",
+        redirectUri: redirectUri,
         audience: "https://lukekarlovich.auth0.com/userinfo",
         responseType: "token id_token",
         scope: "openid profile email"
