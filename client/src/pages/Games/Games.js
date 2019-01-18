@@ -28,7 +28,6 @@ class Games extends Component {
     players: [],
     userImage: this.props.userImage,
     userID: this.props.userID,
-    inGame: null
   };
 
   //When the component mounts, load all books and save them to this.state.books
