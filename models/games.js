@@ -15,7 +15,7 @@ const gameSchema = new Schema({
   author: String,
   authorId: String,
   authorPhoto: String,
-  players: [{email: String, photo: String}]
+  players: {email: String, photo: String}
 });
 
 const Game = mongoose.model("Game", gameSchema);
