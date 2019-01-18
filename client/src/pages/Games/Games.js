@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../../components/SideNav/SideNav.css"
 import DeleteBtn from "../../components/DeleteBtn";
 import API from "../../utils/API";
-import {List, ListItem} from "../../components/List";
+import { List, ListItem } from "../../components/List";
 import { TextArea, FormBtn } from "../../components/Form";
 import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table, Chip } from 'react-materialize';
 import Geocode from "react-geocode";
@@ -97,7 +97,7 @@ class Games extends Component {
       [name]: value
     });
   };
-  
+
   // Handles updating component state when the user types into the input field
   handleButtonClick = e => {
     console.log(e)
@@ -105,7 +105,7 @@ class Games extends Component {
 
   geocode = (city, state) => {
     return Geocode.fromAddress(`${city}, ${state}`);
-}
+  }
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
@@ -130,21 +130,27 @@ class Games extends Component {
             authorId: this.state.userID,
             authorPhoto: this.state.userImage,
           })
-        .then(res => this.loadGames())
-        .catch(err => console.log(err));
-      })
+            .then(res => this.loadGames())
+            .catch(err => console.log(err));
+        })
     }
   };
 
-  sendMail = () => {
+  sendMail = (emailToWho) => {
     console.log("sendMail hit on games.js")
     API.sendMail({
-      emailToWho: this.state.emailToWho,
-      emailMessageContent: this.state.emailMessageContent
-    })
+      emailToWho: emailToWho,
+      emailMessageContent: this.state.emailMessageContent,
+      emailFromWhoName: this.state.author,
+      emailFromWhoEmail: this.state.authorEmail
+    }).then(
+      this.setState({
+        emailMessageContent: "",
+        emailToWho: "",
+      })
+    )
   }
 
-  
   render() {
     return (
 
@@ -161,73 +167,73 @@ class Games extends Component {
           <h3 className="center">Current Games</h3>
 
           {this.state.games.length ? (
-            <List> 
+            <List>
               {this.state.games.map(game => {
                 return (
-                    <ListItem key={game._id}>
+                  <ListItem key={game._id}>
 
                     <div className="center">
-                        <h5><strong>
-                          {game.title} by {game.author}
-                        </strong>
-                        </h5>
+                      <h5><strong>
+                        {game.title} by {game.author}
+                      </strong>
+                      </h5>
                     </div>
 
                     <div className="center description">
                       <h6>Description:</h6>
                       <p id='gameDescription'>{game.description}</p>
                     </div>
-                      
-                      <Table className='center gameInfo'>
-                        <thead>
-                          <tr>
-                            <th data-field="id" className='center'>Sport</th>
-                            <th data-field="name" className='center'>Date</th>
-                            <th data-field="name" className='center'>Time</th>
-                            <th data-field="price" className='center'>Male | Female | Co-Ed</th>
-                          </tr>
-                        </thead>
 
-                        <tbody>
-                          <tr>
-                            <td className='center'>{game.sport}</td>
-                            <td className='center'>{game.date}</td>
-                            <td className='center'>{game.time} </td>
-                            <td className='center'>{game.gender}</td>
-                          </tr>
-                        </tbody>
-                      </Table>
+                    <Table className='center gameInfo'>
+                      <thead>
+                        <tr>
+                          <th data-field="id" className='center'>Sport</th>
+                          <th data-field="name" className='center'>Date</th>
+                          <th data-field="name" className='center'>Time</th>
+                          <th data-field="price" className='center'>Male | Female | Co-Ed</th>
+                        </tr>
+                      </thead>
 
-                      <Row className='center icons'>
-                        <Col s={3}>
-                          <Modal
-                              header='Attendees'
-                              trigger={<i className="material-icons">people</i>}>
-                              <Row>
-                                <Col s={12}>
-                                {/* Create loop to retrieve all user photos and id's for game */}
-                                  <Chip>
-                                    <img src={game.authorPhoto} alt='UserImage' />
-                                    {game.author}
-                                  </Chip>
-                                </Col>
-                              </Row>
-                            </Modal>
-                          <p>{game.playerNumber} spots left!</p>
-                        </Col>
-                        <Col s={3}>
-                          <Modal
-                              header='Location'
-                              trigger={<i className="material-icons">location_on</i>}>
-                              <div className='container'>
-                                <Row>
-                                  <SimpleMap lat={game.lat} lng={game.lng}></SimpleMap>
-                                </Row>
-                              </div>
-                            </Modal>
-                          <p>Location</p>
-                        </Col>
-                        <Col s={3}>
+                      <tbody>
+                        <tr>
+                          <td className='center'>{game.sport}</td>
+                          <td className='center'>{game.date}</td>
+                          <td className='center'>{game.time} </td>
+                          <td className='center'>{game.gender}</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+
+                    <Row className='center icons'>
+                      <Col s={3}>
+                        <Modal
+                          header='Attendees'
+                          trigger={<i className="material-icons">people</i>}>
+                          <Row>
+                            <Col s={12}>
+                              {/* Create loop to retrieve all user photos and id's for game */}
+                              <Chip>
+                                <img src={game.authorPhoto} alt='UserImage' />
+                                {game.author}
+                              </Chip>
+                            </Col>
+                          </Row>
+                        </Modal>
+                        <p>{game.playerNumber} spots left!</p>
+                      </Col>
+                      <Col s={3}>
+                        <Modal
+                          header='Location'
+                          trigger={<i className="material-icons">location_on</i>}>
+                          <div className='container'>
+                            <Row>
+                              <SimpleMap lat={game.lat} lng={game.lng}></SimpleMap>
+                            </Row>
+                          </div>
+                        </Modal>
+                        <p>Location</p>
+                      </Col>
+                      <Col s={3}>
                         <Modal
                           header='Contact Event Author'
                           trigger={<i className="material-icons">email</i>}>
@@ -235,16 +241,18 @@ class Games extends Component {
                             <Row>
                               <Input
                                 s={6}
-                                label="From"
-                                value={this.state.userID}
+                                label={"From: " + this.state.author}
+                                value={this.state.authorEmail}
                                 onChange={this.handleInputChange}
-                                name="title"
-                                placeholder="From"
+                                name="authorEmail"
+                                placeholder={this.state.authorEmail}
+                                type="email"
+                                disabled
                               />
                               <Input
                                 s={6}
-                                label="Message To"
-                                value={this.state.emailToWho}
+                                label={"To: " + game.author}
+                                value={game.authorEmail}
                                 onChange={this.handleInputChange}
                                 name="emailToWho"
                                 placeholder={game.authorEmail}
@@ -253,55 +261,80 @@ class Games extends Component {
 
                             </Row>
                             <Row>
-                              <Input 
-                              s={12} 
-                              label= "Message"
-                              value={this.state.emailMessageContent}
-                              onChange={this.handleInputChange}
-                              name="emailMessageContent"
-                              placeholder="So excited for the volleyball game. Where is the exact location?" 
-                              type='textarea' 
+                              <Input
+                                s={12}
+                                label="Message"
+                                value={this.state.emailMessageContent}
+                                onChange={this.handleInputChange}
+                                name="emailMessageContent"
+                                placeholder="So excited for the volleyball game. Where is the exact location?"
+                                type='textarea'
                               />
                             </Row>
                             <Row className='center'>
-                              <Button className="modal-close" onClick={this.sendMail}>Send</Button>
+                              <Button className="modal-close" onClick={() => this.sendMail(game.authorEmail)}>Send</Button>
 
                             </Row>
                           </Row>
                         </Modal>
-                          <p>Contact</p>
-                        </Col>
-                        <Col s={3}>
-                          <Modal
-                              header='Share'
-                              trigger={<i className="material-icons">share</i>}>
-                              <Row>
-                                  <Row>
-                                    <Input placeholder="Email"  s={6} label="Your Email" />
-                                    <Input placeholder="Recipient" s={6}  label="Recipient Email" />
-                                  </Row>
-                                  <Row>
-                                    <Input placeholder="Input message here" s={12} type='textarea' />
-                                  </Row>
-                                  <Row className='center'>
-                                    <Button className="modal-close">Share</Button>
-                                  </Row>
-                              </Row>
-                            </Modal>
-                          <p>Share</p>
-                        </Col>
-                      </Row>
-                      
-                      <Row className='center joinBtn'>
+                        <p>Contact</p>
+                      </Col>
+                      <Col s={3}>
+                        <Modal
+                          header='Share'
+                          trigger={<i className="material-icons">share</i>}>
+                          <Row>
+                            <Row>
+                              <Input
+                                s={6}
+                                label={"From: " + this.state.author}
+                                value={this.state.authorEmail}
+                                onChange={this.handleInputChange}
+                                name="authorEmail"
+                                placeholder={this.state.authorEmail}
+                                type="email"
+                                disabled
+                              />
+                              <Input
+                                placeholder="Recipient"
+                                s={6}
+                                label="To:"
+                                name="emailToWho"
+                                type="email"
+                                onChange={this.handleInputChange}
+                                value={this.state.emailToWho}
+                                 />
+                            </Row>
+                            <Row>
+                              <Input
+                                s={12}
+                                label="Message"
+                                value={this.state.emailMessageContent}
+                                onChange={this.handleInputChange}
+                                name="emailMessageContent"
+                                placeholder="So excited for the volleyball game. Where is the exact location?"
+                                type='textarea'
+                              />
+                            </Row>
+                            <Row className='center'>
+                              <Button className="modal-close" onClick={() => this.sendMail(this.state.emailToWho)}>Share</Button>
+                            </Row>
+                          </Row>
+                        </Modal>
+                        <p>Share</p>
+                      </Col>
+                    </Row>
+
+                    <Row className='center joinBtn'>
                       <Button waves='light' id={game._id}
                         onClick={() => this.updateGame(game._id, [this.props.userID, this.props.userImage])}
-                        // disabled={}
-                        >
-                          Join!
+                      // disabled={}
+                      >
+                        Join!
                         </Button>
-                        {/* <DeleteBtn onClick={() => this.deleteGame(game._id)} /> */}
-                      </Row>
-                    </ListItem>
+                      {/* <DeleteBtn onClick={() => this.deleteGame(game._id)} /> */}
+                    </Row>
+                  </ListItem>
                 );
               })}
             </List>
@@ -310,80 +343,150 @@ class Games extends Component {
             )}
         </Col>
 
-      <Col s={8}>
-        <SideNav
+        <Col s={8}>
+          <SideNav
           // trigger={<Button></Button>}
           // options={{ closeOnClick: true }}
-        >
-          {/* USER SIDENAV SECTION */}
-          <SideNavItem userView s={12}
-            user={{
-              background: "https://media.istockphoto.com/photos/abstract-blue-background-picture-id875762470?k=6&m=875762470&s=612x612&w=0&h=FYhQuC9CZlxOZW-rAkEvQ0jq1onsY18bUN9a2HBQd3k=",
-              image: this.state.userImage,
-              name: this.state.author,
-              email: this.state.authorEmail
-            }}
-          />
-          {/* <SideNavItem>{this.state.author}</SideNavItem>
+          >
+            {/* USER SIDENAV SECTION */}
+            <SideNavItem userView s={12}
+              user={{
+                background: "https://media.istockphoto.com/photos/abstract-blue-background-picture-id875762470?k=6&m=875762470&s=612x612&w=0&h=FYhQuC9CZlxOZW-rAkEvQ0jq1onsY18bUN9a2HBQd3k=",
+                image: this.state.userImage,
+                name: this.state.author,
+                email: this.state.authorEmail
+              }}
+            />
+            {/* <SideNavItem>{this.state.author}</SideNavItem>
           <SideNavItem>{this.state.userID}</SideNavItem> */}
-          <SideNavItem>
-            <Button onClick={this.props.auth.logout}>Logout</Button>
-          </SideNavItem>
-          <SideNavItem subheader>Filters</SideNavItem>
-          {/* FILTER FOR GENDER */}
-          {/* FILTER DATE */}
-          <Row>
-            <SideNavItem >
-              <Input s={12} label='Date Selector' name='on' type='date' onChange={function (e, value) { }} />
+            <SideNavItem>
+              <Button onClick={this.props.auth.logout}>Logout</Button>
             </SideNavItem>
-          </Row>
-          <SideNavItem>
-            <Input name='coed' type='checkbox' value='coed' label='Co-Ed' defaultChecked='checked' />
-          </SideNavItem>
-          <SideNavItem>
-            <Input name='male' type='checkbox' value='male' label='Male Only' />
-          </SideNavItem>
-          <SideNavItem>
-            <Input name='female' type='checkbox' value='female' label='Female Only' />
-          </SideNavItem>
-          <br></br>
-          {/* FILTER SPORT-AUTOPOPULATE FROM DB */}
-          <SideNavItem>
+            <SideNavItem subheader>Filters</SideNavItem>
+            {/* FILTER FOR GENDER */}
+            {/* FILTER DATE */}
             <Row>
-              <Input s={12} type='select' label="Select Sport">
-                <option value='all'>All</option>
-                <option value='1'>Soccer</option>
-                <option value='2'>Tennis</option>
-                <option value='3'>Football</option>
-              </Input>
+              <SideNavItem >
+                <Input s={12} label='Date Selector' name='on' type='date' onChange={function (e, value) { }} />
+              </SideNavItem>
             </Row>
-          </SideNavItem>
-          {/* FILTER LOCATION- AUTOPOPULATE FROM DB */}
-          <SideNavItem>
-            <Row>
-              <Input s={12} type='select' label="Select Loation">
-                <option value='all'>All</option>
-                <option value='1'>Denver</option>
-                <option value='2'>Centennial</option>
-                <option value='3'>Aurora</option>
-              </Input>
-            </Row>
-          </SideNavItem>
+            <SideNavItem>
+              <Input name='coed' type='checkbox' value='coed' label='Co-Ed' defaultChecked='checked' />
+            </SideNavItem>
+            <SideNavItem>
+              <Input name='male' type='checkbox' value='male' label='Male Only' />
+            </SideNavItem>
+            <SideNavItem>
+              <Input name='female' type='checkbox' value='female' label='Female Only' />
+            </SideNavItem>
+            <br></br>
+            {/* FILTER SPORT-AUTOPOPULATE FROM DB */}
+            <SideNavItem>
+              <Row>
+                <Input s={12} type='select' label="Select Sport">
+                  <option value='all'>All</option>
+                  <option value='1'>Soccer</option>
+                  <option value='2'>Tennis</option>
+                  <option value='3'>Football</option>
+                </Input>
+              </Row>
+            </SideNavItem>
+            {/* FILTER LOCATION- AUTOPOPULATE FROM DB */}
+            <SideNavItem>
+              <Row>
+                <Input s={12} type='select' label="Select Loation">
+                  <option value='all'>All</option>
+                  <option value='1'>Denver</option>
+                  <option value='2'>Centennial</option>
+                  <option value='3'>Aurora</option>
+                </Input>
+              </Row>
+            </SideNavItem>
 
-          <br></br>
-          <SideNavItem divider />
-          <br></br>
-          {/* DROP DOWN UPCOMING GAMES */}
+            <br></br>
+            <SideNavItem divider />
+            <br></br>
+            {/* DROP DOWN UPCOMING GAMES */}
 
-          <Collapsible>
-            <Badge>4</Badge>
-            <CollapsibleItem header='Upcoming Games' icon='arrow_drop_down'>
-              <Collection>
-                {/* THIS WILL DISPLAY 4 UPCOMING GAMES */}
-                <CollectionItem>
-                  <Modal
-                    header='Tennis'
-                    trigger={<Button className="white" flat waves="teal">Tennis</Button>}>
+            <Collapsible>
+              <Badge>4</Badge>
+              <CollapsibleItem header='Upcoming Games' icon='arrow_drop_down'>
+                <Collection>
+                  {/* THIS WILL DISPLAY 4 UPCOMING GAMES */}
+                  <CollectionItem>
+                    <Modal
+                      header='Tennis'
+                      trigger={<Button className="white" flat waves="teal">Tennis</Button>}>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Sport</th>
+                            <th data-field="name">Location</th>
+                            <th data-field="price">Date</th>
+                            <th data-field="price">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Tennis</td>
+                            <td>Denver</td>
+                            <td>January 26, 2019</td>
+                            <td>2:00pm</td>
+                          </tr>
+                        </tbody>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Descripton</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>SPORTS GAME DESCRIPTION</td>
+                          </tr>
+                        </tbody>
+
+                      </Table>
+                    </Modal>
+                  </CollectionItem>
+                  {/* THIS WILL AUTO POPULATE FROM DB */}
+                  <CollectionItem >
+                    <Modal
+                      header='Football'
+                      trigger={<Button className="white" flat waves="teal">Football</Button>}>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Sport</th>
+                            <th data-field="name">Location</th>
+                            <th data-field="price">Date</th>
+                            <th data-field="price">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Football</td>
+                            <td>Denver</td>
+                            <td>January 26, 2019</td>
+                            <td>2:00pm</td>
+                          </tr>
+                        </tbody>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Descripton</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>SPORTS GAME DESCRIPTION</td>
+                          </tr>
+                        </tbody>
+
+                      </Table>
+                    </Modal>
+                  </CollectionItem>
+                  <CollectionItem > <Modal
+                    header='Game'
+                    trigger={<Button className="white" flat waves="teal">Game</Button>}>
                     <Table>
                       <thead>
                         <tr>
@@ -395,7 +498,40 @@ class Games extends Component {
                       </thead>
                       <tbody>
                         <tr>
-                          <td>Tennis</td>
+                          <td>Game</td>
+                          <td>Denver</td>
+                          <td>January 26, 2019</td>
+                          <td>2:00pm</td>
+                        </tr>
+                      </tbody>
+                      <thead>
+                        <tr>
+                          <th data-field="id">Descripton</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>SPORTS GAME DESCRIPTION</td>
+                        </tr>
+                      </tbody>
+
+                    </Table>
+                  </Modal></CollectionItem>
+                  <CollectionItem> <Modal
+                    header='Soccer'
+                    trigger={<Button className="white" flat waves="teal">Soccer</Button>}>
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th data-field="id">Sport</th>
+                          <th data-field="name">Location</th>
+                          <th data-field="price">Date</th>
+                          <th data-field="price">Time</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Soccer</td>
                           <td>Denver</td>
                           <td>January 26, 2019</td>
                           <td>2:00pm</td>
@@ -414,10 +550,51 @@ class Games extends Component {
 
                     </Table>
                   </Modal>
-                </CollectionItem>
-                {/* THIS WILL AUTO POPULATE FROM DB */}
-                <CollectionItem >
-                  <Modal
+                  </CollectionItem>
+                </Collection>
+              </CollapsibleItem>
+
+              <br></br>
+              {/* DROP DOWN OF GAMES CREATE */}
+              <CollapsibleItem header='Created Games' icon="arrow_drop_down">
+                <Collection>
+                  {/* SHOWS 4 CREATED GAMES-NEWEST CREATED LISTED FIRST */}
+                  <CollectionItem>
+                    <Modal
+                      header='Tennis'
+                      trigger={<Button className="white" flat waves="teal">Tennis</Button>}>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Sport</th>
+                            <th data-field="name">Location</th>
+                            <th data-field="price">Date</th>
+                            <th data-field="price">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Tennis</td>
+                            <td>Denver</td>
+                            <td>January 26, 2019</td>
+                            <td>2:00pm</td>
+                          </tr>
+                        </tbody>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Descripton</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>SPORTS GAME DESCRIPTION</td>
+                          </tr>
+                        </tbody>
+
+                      </Table>
+                    </Modal>
+                  </CollectionItem>
+                  <CollectionItem > <Modal
                     header='Football'
                     trigger={<Button className="white" flat waves="teal">Football</Button>}>
                     <Table>
@@ -450,86 +627,10 @@ class Games extends Component {
 
                     </Table>
                   </Modal>
-                </CollectionItem>
-                <CollectionItem > <Modal
-                  header='Game'
-                  trigger={<Button className="white" flat waves="teal">Game</Button>}>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Sport</th>
-                        <th data-field="name">Location</th>
-                        <th data-field="price">Date</th>
-                        <th data-field="price">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Game</td>
-                        <td>Denver</td>
-                        <td>January 26, 2019</td>
-                        <td>2:00pm</td>
-                      </tr>
-                    </tbody>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Descripton</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>SPORTS GAME DESCRIPTION</td>
-                      </tr>
-                    </tbody>
-
-                  </Table>
-                </Modal></CollectionItem>
-                <CollectionItem> <Modal
-                  header='Soccer'
-                  trigger={<Button className="white" flat waves="teal">Soccer</Button>}>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Sport</th>
-                        <th data-field="name">Location</th>
-                        <th data-field="price">Date</th>
-                        <th data-field="price">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Soccer</td>
-                        <td>Denver</td>
-                        <td>January 26, 2019</td>
-                        <td>2:00pm</td>
-                      </tr>
-                    </tbody>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Descripton</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>SPORTS GAME DESCRIPTION</td>
-                      </tr>
-                    </tbody>
-
-                  </Table>
-                </Modal>
-                </CollectionItem>
-              </Collection>
-            </CollapsibleItem>
-
-            <br></br>
-            {/* DROP DOWN OF GAMES CREATE */}
-            <CollapsibleItem header='Created Games' icon="arrow_drop_down">
-              <Collection>
-                {/* SHOWS 4 CREATED GAMES-NEWEST CREATED LISTED FIRST */}
-                <CollectionItem>
-                  <Modal
-                    header='Tennis'
-                    trigger={<Button className="white" flat waves="teal">Tennis</Button>}>
+                  </CollectionItem>
+                  <CollectionItem > <Modal
+                    header='Game'
+                    trigger={<Button className="white" flat waves="teal">Game</Button>}>
                     <Table>
                       <thead>
                         <tr>
@@ -541,7 +642,7 @@ class Games extends Component {
                       </thead>
                       <tbody>
                         <tr>
-                          <td>Tennis</td>
+                          <td>Game</td>
                           <td>Denver</td>
                           <td>January 26, 2019</td>
                           <td>2:00pm</td>
@@ -560,150 +661,82 @@ class Games extends Component {
 
                     </Table>
                   </Modal>
-                </CollectionItem>
-                <CollectionItem > <Modal
-                  header='Football'
-                  trigger={<Button className="white" flat waves="teal">Football</Button>}>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Sport</th>
-                        <th data-field="name">Location</th>
-                        <th data-field="price">Date</th>
-                        <th data-field="price">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Football</td>
-                        <td>Denver</td>
-                        <td>January 26, 2019</td>
-                        <td>2:00pm</td>
-                      </tr>
-                    </tbody>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Descripton</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>SPORTS GAME DESCRIPTION</td>
-                      </tr>
-                    </tbody>
+                  </CollectionItem>
+                  {/* THIS IS WHAT A PAST CREATED GAME LOOKS LIKE */}
+                  <CollectionItem>
+                    <Modal className="red lighten-5"
+                      header='Soccer'
+                      trigger={<Button className="white" flat waves="red">Soccer</Button>}>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Sport</th>
+                            <th data-field="name">Location</th>
+                            <th data-field="price">Date</th>
+                            <th data-field="price">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Soccer</td>
+                            <td>Denver</td>
+                            <td>November 10, 2018</td>
+                            <td>2:00pm</td>
+                          </tr>
+                        </tbody>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Descripton</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>SPORTS GAME DESCRIPTION</td>
+                          </tr>
+                        </tbody>
 
-                  </Table>
-                </Modal>
-                </CollectionItem>
-                <CollectionItem > <Modal
-                  header='Game'
-                  trigger={<Button className="white" flat waves="teal">Game</Button>}>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Sport</th>
-                        <th data-field="name">Location</th>
-                        <th data-field="price">Date</th>
-                        <th data-field="price">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Game</td>
-                        <td>Denver</td>
-                        <td>January 26, 2019</td>
-                        <td>2:00pm</td>
-                      </tr>
-                    </tbody>
-                    <thead>
-                      <tr>
-                        <th data-field="id">Descripton</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>SPORTS GAME DESCRIPTION</td>
-                      </tr>
-                    </tbody>
+                      </Table>
+                    </Modal>
+                  </CollectionItem>
+                </Collection>
+              </CollapsibleItem>
+            </Collapsible>
 
-                  </Table>
-                </Modal>
-                </CollectionItem>
-                {/* THIS IS WHAT A PAST CREATED GAME LOOKS LIKE */}
-                <CollectionItem>
-                  <Modal className="red lighten-5"
-                    header='Soccer'
-                    trigger={<Button className="white" flat waves="red">Soccer</Button>}>
-                    <Table>
-                      <thead>
-                        <tr>
-                          <th data-field="id">Sport</th>
-                          <th data-field="name">Location</th>
-                          <th data-field="price">Date</th>
-                          <th data-field="price">Time</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Soccer</td>
-                          <td>Denver</td>
-                          <td>November 10, 2018</td>
-                          <td>2:00pm</td>
-                        </tr>
-                      </tbody>
-                      <thead>
-                        <tr>
-                          <th data-field="id">Descripton</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>SPORTS GAME DESCRIPTION</td>
-                        </tr>
-                      </tbody>
-
-                    </Table>
-                  </Modal>
-                </CollectionItem>
-              </Collection>
-            </CollapsibleItem>
-          </Collapsible>
-
-          <br></br>
-          {/* NEW GAME BUTTON MODAL POPUP */}
-          <SideNavItem className='center' >
-            <Modal
-              header='New Game'
-              trigger={<Button>Create Game</Button>}>
-              <Row>
-                <Input
-                  s={6}
-                  value={this.state.title}
-                  onChange={this.handleInputChange}
-                  name="title"
-                  placeholder="Title (required)"
-                />
-                <Input s={6}
-                  value={this.state.author}
-                  onChange={this.handleInputChange}
-                  name="author"
-                  placeholder="Player Name(required)"
-                />
-                <Input s={6}
-                  value={this.state.authorEmail}
-                  onChange={this.handleInputChange}
-                  name="authorEmail"
-                  placeholder="Player Email (required)"
-                />
-                <Input
-                  label="Select Sport"
-                  value={this.state.sport}
-                  onChange={this.handleInputChange}
-                  name="sport"
-                  placeholder="Sport (required)"
-                />
+            <br></br>
+            {/* NEW GAME BUTTON MODAL POPUP */}
+            <SideNavItem className='center' >
+              <Modal
+                header='New Game'
+                trigger={<Button>Create Game</Button>}>
                 <Row>
-                  {/* <Input s={9} 
+                  <Input
+                    s={6}
+                    value={this.state.title}
+                    onChange={this.handleInputChange}
+                    name="title"
+                    placeholder="Title (required)"
+                  />
+                  <Input s={6}
+                    value={this.state.author}
+                    onChange={this.handleInputChange}
+                    name="author"
+                    placeholder="Player Name(required)"
+                  />
+                  <Input s={6}
+                    value={this.state.authorEmail}
+                    onChange={this.handleInputChange}
+                    name="authorEmail"
+                    placeholder="Player Email (required)"
+                  />
+                  <Input
+                    label="Select Sport"
+                    value={this.state.sport}
+                    onChange={this.handleInputChange}
+                    name="sport"
+                    placeholder="Sport (required)"
+                  />
+                  <Row>
+                    {/* <Input s={9} 
                     type='select' 
                     label="Select Sport" 
                     onChange={this.handleInputChange}>
@@ -711,50 +744,50 @@ class Games extends Component {
                     <option value='2'>Sport 2</option>
                     <option value='3'>Sport 3</option>
                   </Input> */}
-                  <Input
-                    value={this.state.playerNumber}
-                    onChange={this.handleInputChange}
-                    name="playerNumber"
-                    placeholder="Number of Players"
-                    type="number"
-                  />
-                </Row>
+                    <Input
+                      value={this.state.playerNumber}
+                      onChange={this.handleInputChange}
+                      name="playerNumber"
+                      placeholder="Number of Players"
+                      type="number"
+                    />
+                  </Row>
 
-                <Input
-                  value={this.state.date}
-                  onChange={this.handleInputChange}
-                  name="date"
-                  placeholder="Date (required)"
-                  type='date'
-                />
-                <Input
-                  value={this.state.time}
-                  onChange={this.handleInputChange}
-                  name="time"
-                  placeholder="Time"
-                  type='time'
-                />
-
-                <Input
-                  value={this.state.city}
-                  onChange={this.handleInputChange}
-                  name="city"
-                  placeholder="City"
-                />
-                <Input
-                  value={this.state.state}
-                  onChange={this.handleInputChange}
-                  name="state"
-                  placeholder="State"
-                />
-                <Row s={4} offset='s4'>
                   <Input
-                    value={this.state.gender}
+                    value={this.state.date}
                     onChange={this.handleInputChange}
-                    name="gender"
-                    placeholder="Gender"
+                    name="date"
+                    placeholder="Date (required)"
+                    type='date'
                   />
-                  {/* <Input
+                  <Input
+                    value={this.state.time}
+                    onChange={this.handleInputChange}
+                    name="time"
+                    placeholder="Time"
+                    type='time'
+                  />
+
+                  <Input
+                    value={this.state.city}
+                    onChange={this.handleInputChange}
+                    name="city"
+                    placeholder="City"
+                  />
+                  <Input
+                    value={this.state.state}
+                    onChange={this.handleInputChange}
+                    name="state"
+                    placeholder="State"
+                  />
+                  <Row s={4} offset='s4'>
+                    <Input
+                      value={this.state.gender}
+                      onChange={this.handleInputChange}
+                      name="gender"
+                      placeholder="Gender"
+                    />
+                    {/* <Input
                     value={this.state.gender}
                     onChange={this.handleInputChange}
                     name="gender"
@@ -774,24 +807,24 @@ class Games extends Component {
                     onChange={this.handleInputChange}
                     name="gender"
                     type='checkbox' label='Female Only' />*/}
-                </Row>
-                <TextArea
-                  value={this.state.description}
-                  onChange={this.handleInputChange}
-                  name="descrition"
-                  placeholder="Description (Optional)"
-                />
-                <FormBtn
-                  disabled={!(this.state.author && this.state.title)}
-                  onClick={this.handleFormSubmit}
-                  className="modal-close"
-                >
-                  Submit Event
+                  </Row>
+                  <TextArea
+                    value={this.state.description}
+                    onChange={this.handleInputChange}
+                    name="descrition"
+                    placeholder="Description (Optional)"
+                  />
+                  <FormBtn
+                    disabled={!(this.state.author && this.state.title)}
+                    onClick={this.handleFormSubmit}
+                    className="modal-close"
+                  >
+                    Submit Event
               </FormBtn>
-              </Row>
-            </Modal>
-          </SideNavItem>
-        </SideNav>
+                </Row>
+              </Modal>
+            </SideNavItem>
+          </SideNav>
         </Col>
       </Row>
     );
