@@ -1,9 +1,10 @@
 import React from "react";
+import { Button } from 'react-materialize';
 
 export function FormBtn(props) {
   return (
-    <button {...props} style={{ float: "right", marginBottom: 10 }} className="btn btn-success">
+    <Button {...props} style={{ float: "right", marginBottom: 10 }} className="cyan darken-3 center">
       {props.children}
-    </button>
+    </Button>
   );
 }
