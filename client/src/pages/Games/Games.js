@@ -25,6 +25,7 @@ class Games extends Component {
     state: "",
     description: "",
     emailToWho: "",
+    players: [],
     userImage: this.props.userImage,
     userID: this.props.userID,
     emailMessageContent: ""
@@ -37,24 +38,37 @@ class Games extends Component {
     Geocode.setApiKey("AIzaSyBFxBvSfL6-CmTt4k6mtU03hLHt9OJgHuI");
   }
 
-  // Loads all books and sets them to this.state.books
+  // Loads all books and sets them to this.state.games
   loadGames = () => {
     API.getGames()
       .then(res =>
-        this.setState({
-          games: res.data,
-          title: "",
-          sport: "",
-          playerNumber: "",
-          date: "",
-          time: "",
-          gender: "",
-          city: "",
-          state: "",
-          description: ""
-        })
-      )
-
+          // res.data.map(element => {
+            // console.log(this.props.userID)
+            // console.log(element)
+            // if(this.props.userID == element.email) {
+                // this.setState({
+                //   inGame: true
+                // })
+            // } 
+            // else {
+              // this.setState({
+              //   inGame: false
+              // })
+            // }
+          // })
+          this.setState({
+            games: res.data,
+            title: "",
+            sport: "",
+            playerNumber: "",
+            date: "",
+            time: "",
+            gender: "",
+            city: "",
+            state: "",
+            description: ""
+          })
+        )
       .catch(err => console.log(err));
   };
 
@@ -83,8 +97,9 @@ class Games extends Component {
   // Deletes a book from the database with a given id, then reloads books from the db
   updateGame = (id, userData) => {
     console.log("Player added to game")
-    console.log(id)
-    console.log(userData)
+    this.setState({
+      inGame: true
+    })
     API.updateGame(id, userData)
       .then(res => this.loadGames())
       .catch(err => console.log(err.response));
@@ -163,9 +178,28 @@ class Games extends Component {
           {this.state.games.length ? (
             <List> 
               {this.state.games.map(game => {
+                
+                
+                let inGame = ["null"];
+                if(game.players) {
+                  game.players.map(element => {
+                  // console.log("userID: ", this.state.userID)
+                  // console.log("element.email: ", element.email)
+                  console.log("=======")
+                  if(this.state.userID == element.email) {
+                      // console.log("true: ", game._id)
+                      inGame[0] = game._id
+                    } 
+                  })
+                }
+
+
+                // console.log("inGame: ", inGame[0])
+                // console.log("game._id: ", game._id)
+                  
                 return (
                     <ListItem key={game._id}>
-
+                    
                     <div className="center">
                         <h5><strong>
                           {game.title} by {game.author}
@@ -205,11 +239,24 @@ class Games extends Component {
                               trigger={<i className="material-icons">people</i>}>
                               <Row>
                                 <Col s={12}>
-                                {/* Create loop to retrieve all user photos and id's for game */}
+                                
+                                {/* creates author chip in attendees section */}
                                   <Chip>
                                     <img src={game.authorPhoto} alt='UserImage' />
                                     {game.author}
                                   </Chip>
+                                  
+                                  {/* creates chips for players if there are players added to game */}
+
+                                  {game.players ? game.players.map(element => {
+                                    return(
+                                      <Chip>
+                                        <img src={element.photo} alt='UserImage' />
+                                        {element.email}
+                                      </Chip>
+                                      )
+                                  }) : console.log('You have no players')}
+
                                 </Col>
                               </Row>
                             </Modal>
@@ -291,15 +338,13 @@ class Games extends Component {
                           <p>Share</p>
                         </Col>
                       </Row>
-                      
+
                       <Row className='center joinBtn'>
-                      <Button waves='light' id={game._id}
-                        onClick={() => this.updateGame(game._id, [this.props.userID, this.props.userImage])}
-                        // disabled={}
+                      <Button waves='light' id={game._id} disabled={game._id === inGame[0] ? true : game.playerNumber === 0 ? true : false} 
+                        onClick={() => this.updateGame(game._id, {email: this.props.userID, photo:this.props.userImage})}
                         >
                           Join!
                         </Button>
-                        {/* <DeleteBtn onClick={() => this.deleteGame(game._id)} /> */}
                       </Row>
                     </ListItem>
                 );
