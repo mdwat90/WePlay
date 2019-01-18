@@ -483,7 +483,7 @@ class Games extends Component {
                         </tbody>
                         <thead>
                           <tr>
-                            <th data-field="id">Descripton</th>
+                            <th data-field="id">Description</th>
                           </tr>
                         </thead>
                         <tbody>
