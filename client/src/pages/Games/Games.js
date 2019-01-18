@@ -182,19 +182,19 @@ class Games extends Component {
                 let inGame = ["null"];
                 if(game.players) {
                   game.players.map(element => {
-                  console.log("userID: ", this.state.userID)
-                  console.log("element.email: ", element.email)
+                  // console.log("userID: ", this.state.userID)
+                  // console.log("element.email: ", element.email)
                   console.log("=======")
                   if(this.state.userID == element.email) {
-                      console.log("true: ", game._id)
+                      // console.log("true: ", game._id)
                       inGame[0] = game._id
                     } 
                   })
                 }
 
 
-                console.log("inGame: ", inGame[0])
-                console.log("game._id: ", game._id)
+                // console.log("inGame: ", inGame[0])
+                // console.log("game._id: ", game._id)
                   
                 return (
                     <ListItem key={game._id}>

@@ -3,6 +3,7 @@ import Games from "./pages/Games";
 import Main from "./components/Main";
 import NotFound from "./components/NotFound";
 import Callback from "./components/Callback";
+require('dotenv').config();
 
 class App extends Component {
   render() {

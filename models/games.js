@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const gameSchema = new Schema({
   title: { type: String, required: true },
   sport:{ type: String, required: true },
-  date: String,
-  gender: { type: String, required: true },
+  date:{ type: String, required: true },
+  gender: String,
   lat: { type: Number, required: true },
   lng: { type: Number, required: true },
   playerNumber: Number,
