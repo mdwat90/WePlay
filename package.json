@@ -1,6 +1,9 @@
 {
   "name": "weplay",
   "version": "1.0.0",
+  "engines": {
+    "node":"10.4.1"
+  },
   "description": "",
   "main": "server.js",
   "scripts": {
