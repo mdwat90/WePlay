@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import "../../components/SideNav/SideNav.css"
-import DeleteBtn from "../../components/DeleteBtn";
+//import DeleteBtn from "../../components/DeleteBtn";
 import API from "../../utils/API";
-import { List, ListItem } from "../../components/List";
-import { TextArea, FormBtn } from "../../components/Form";
-import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table, Chip } from 'react-materialize';
+import {List, ListItem} from "../../components/List";
+import { FormBtn } from "../../components/Form";
+import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Input, Button, Table, Chip} from 'react-materialize';
 import Geocode from "react-geocode";
 import SimpleMap from "../../components/GoogleMaps/google-maps"
 
@@ -28,7 +28,6 @@ class Games extends Component {
     players: [],
     userImage: this.props.userImage,
     userID: this.props.userID,
-    emailMessageContent: ""
   };
 
   //When the component mounts, load all books and save them to this.state.books
@@ -98,7 +97,7 @@ class Games extends Component {
       [name]: value
     });
   };
-
+  
   // Handles updating component state when the user types into the input field
   handleButtonClick = e => {
     console.log(e)
@@ -106,7 +105,7 @@ class Games extends Component {
 
   geocode = (city, state) => {
     return Geocode.fromAddress(`${city}, ${state}`);
-  }
+}
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
@@ -131,27 +130,20 @@ class Games extends Component {
             authorId: this.state.userID,
             authorPhoto: this.state.userImage,
           })
-            .then(res => this.loadGames())
-            .catch(err => console.log(err));
-        })
+        .then(res => this.loadGames())
+        .catch(err => console.log(err));
+      })
     }
   };
 
-  sendMail = (emailToWho) => {
+  sendMail = () => {
     console.log("sendMail hit on games.js")
     API.sendMail({
-      emailToWho: emailToWho,
-      emailMessageContent: this.state.emailMessageContent,
-      emailFromWhoName: this.state.author,
-      emailFromWhoEmail: this.state.authorEmail
-    }).then(
-      this.setState({
-        emailMessageContent: "",
-        emailToWho: "",
-      })
-    )
+      emailToWho: this.state.emailToWho
+    })
   }
 
+  
   render() {
     return (
 
@@ -162,13 +154,13 @@ class Games extends Component {
             <NavItem>
             </NavItem>
           </Navbar>
-
+        
 
 
           <h3 className="center">Current Games</h3>
 
           {this.state.games.length ? (
-            <List>
+            <List> 
               {this.state.games.map(game => {
                 
                 
@@ -190,39 +182,39 @@ class Games extends Component {
                 // console.log("game._id: ", game._id)
                   
                 return (
-                  <ListItem key={game._id}>
-
+                    <ListItem key={game._id}>
+                    
                     <div className="center">
-                      <h5><strong>
-                        {game.title} by {game.author}
-                      </strong>
-                      </h5>
+                        <h5><strong>
+                          {game.title} by {game.author}
+                        </strong>
+                        </h5>
                     </div>
 
                     <div className="center description">
                       <h6>Description:</h6>
                       <p id='gameDescription'>{game.description}</p>
                     </div>
+                      
+                      <Table className='center gameInfo'>
+                        <thead>
+                          <tr>
+                            <th data-field="id" className='center'>Sport</th>
+                            <th data-field="name" className='center'>Date</th>
+                            <th data-field="name" className='center'>Time</th>
+                            <th data-field="price" className='center'>Male | Female | Co-Ed</th>
+                          </tr>
+                        </thead>
 
-                    <Table className='center gameInfo'>
-                      <thead>
-                        <tr>
-                          <th data-field="id" className='center'>Sport</th>
-                          <th data-field="name" className='center'>Date</th>
-                          <th data-field="name" className='center'>Time</th>
-                          <th data-field="price" className='center'>Male | Female | Co-Ed</th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr>
-                          <td className='center'>{game.sport}</td>
-                          <td className='center'>{game.date}</td>
-                          <td className='center'>{game.time} </td>
-                          <td className='center'>{game.gender}</td>
-                        </tr>
-                      </tbody>
-                    </Table>
+                        <tbody>
+                          <tr>
+                            <td className='center'>{game.sport}</td>
+                            <td className='center'>{game.date}</td>
+                            <td className='center'>{game.time} </td>
+                            <td className='center'>{game.gender}</td>
+                          </tr>
+                        </tbody>
+                      </Table>
 
                       <Row className='center icons'>
                         <Col s={3}>
@@ -290,6 +282,7 @@ class Games extends Component {
                                 name="emailToWho"
                                 placeholder={game.authorEmail}
                                 type="email"
+                                disabled
                               />
 
                             </Row>
@@ -329,7 +322,7 @@ class Games extends Component {
                                 disabled
                               />
                               <Input
-                                placeholder="Recipient"
+                                placeholder="JohnDoe@email.com"
                                 s={6}
                                 label="To:"
                                 name="emailToWho"
@@ -345,28 +338,29 @@ class Games extends Component {
                                 value={this.state.emailMessageContent}
                                 onChange={this.handleInputChange}
                                 name="emailMessageContent"
-                                placeholder="So excited for the volleyball game. Where is the exact location?"
+                                placeholder="Hey! Check out this game I found on WePlay!"
                                 type='textarea'
                               />
                             </Row>
                             <Row className='center'>
                               <Button className="modal-close" onClick={() => this.sendMail(this.state.emailToWho)}>Share</Button>
                             </Row>
-                          </Row>
-                        </Modal>
-                        <p>Share</p>
-                      </Col>
-                    </Row>
+                            </Row>
+                          </Modal>
+                          
+                          <p>Contact</p>
+                        </Col>
+                        
+                      </Row>
 
-                    <Row className='center joinBtn'>
+                      <Row className='center joinBtn'>
                       <Button waves='light' id={game._id} disabled={game._id === inGame[0] ? true : game.playerNumber === 0 ? true : false} 
                         onClick={() => this.updateGame(game._id, {email: this.props.userID, photo:this.props.userImage})}
                         >
-                        Join!
+                          Join!
                         </Button>
-                      {/* <DeleteBtn onClick={() => this.deleteGame(game._id)} /> */}
-                    </Row>
-                  </ListItem>
+                      </Row>
+                    </ListItem>
                 );
               })}
             </List>
@@ -374,7 +368,6 @@ class Games extends Component {
               <h5 className="center">No Results to Display</h5>
             )}
         </Col>
-
         <Col s={8}>
           <SideNav>
             {/* USER SIDENAV SECTION */}
@@ -415,6 +408,7 @@ class Games extends Component {
                     onChange={this.handleChange}
                     name="authorEmail"
                     placeholder="Player Email *"
+<<<<<<< HEAD
                   />
                   <Input
                     s={12}
@@ -424,6 +418,17 @@ class Games extends Component {
                     placeholder="Event Title *"
                   />
                   <Input
+=======
+                  />
+                  <Input
+                    s={12}
+                    value={this.state.title}
+                    onChange={this.handleInputChange}
+                    name="title"
+                    placeholder="Event Title *"
+                  />
+                  <Input
+>>>>>>> master
                     s={2}
                     value={this.state.sport}
                     onChange={this.handleInputChange}
@@ -727,5 +732,7 @@ class Games extends Component {
     );
   }
 }
+           
+
 
 export default Games;
