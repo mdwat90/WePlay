@@ -42,20 +42,6 @@ class Games extends Component {
   loadGames = () => {
     API.getGames()
       .then(res =>
-          // res.data.map(element => {
-            // console.log(this.props.userID)
-            // console.log(element)
-            // if(this.props.userID == element.email) {
-                // this.setState({
-                //   inGame: true
-                // })
-            // } 
-            // else {
-              // this.setState({
-              //   inGame: false
-              // })
-            // }
-          // })
           this.setState({
             games: res.data,
             title: "",
@@ -373,10 +359,9 @@ class Games extends Component {
                     </Row>
 
                     <Row className='center joinBtn'>
-                      <Button waves='light' id={game._id}
-                        onClick={() => this.updateGame(game._id, [this.props.userID, this.props.userImage])}
-                      // disabled={}
-                      >
+                      <Button waves='light' id={game._id} disabled={game._id === inGame[0] ? true : game.playerNumber === 0 ? true : false} 
+                        onClick={() => this.updateGame(game._id, {email: this.props.userID, photo:this.props.userImage})}
+                        >
                         Join!
                         </Button>
                       {/* <DeleteBtn onClick={() => this.deleteGame(game._id)} /> */}
