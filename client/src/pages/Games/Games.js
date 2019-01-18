@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import "../../components/SideNav/SideNav.css"
-import DeleteBtn from "../../components/DeleteBtn";
+//import DeleteBtn from "../../components/DeleteBtn";
 import API from "../../utils/API";
 import {List, ListItem} from "../../components/List";
 import { TextArea, FormBtn } from "../../components/Form";
-import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table, Chip, Tag } from 'react-materialize';
+import { Row, Col, Navbar, NavItem, SideNav, SideNavItem, Modal, Collapsible, CollapsibleItem, Collection, CollectionItem, Badge, Input, Button, Table, Chip } from 'react-materialize';
 import Geocode from "react-geocode";
 import SimpleMap from "../../components/GoogleMaps/google-maps"
 
@@ -136,11 +136,19 @@ class Games extends Component {
     }
   };
 
-  sendMail = () => {
+  sendMail = (emailToWho) => {
     console.log("sendMail hit on games.js")
     API.sendMail({
-      emailToWho: this.state.emailToWho
-    })
+      emailToWho: emailToWho,
+      emailMessageContent: this.state.emailMessageContent,
+      emailFromWhoName: this.state.author,
+      emailFromWhoEmail: this.state.authorEmail
+    }).then(
+      this.setState({
+        emailMessageContent: "",
+        emailToWho: "",
+      })
+    )
   }
 
   
@@ -259,40 +267,94 @@ class Games extends Component {
                           <p>Location</p>
                         </Col>
                         <Col s={3}>
-                          <Modal
-                            header='Contact Event Author'
-                            trigger={<i className="material-icons">email</i>}>
+                        <Modal
+                          header='Contact Event Author'
+                          trigger={<i className="material-icons">email</i>}>
+                          <Row>
                             <Row>
-                                <Row>
-                                <Input placeholder="Your Name" s={12} label={this.state.userID} />
-                                </Row>
-                                <Row>
-                                  <Input placeholder="Input message here" s={12} type='textarea' />
-                                </Row>
-                                <Row className='center'>
-                                  <Button>Send</Button>
-                                </Row>
+                              <Input
+                                s={6}
+                                label={"From: " + this.state.author}
+                                value={this.state.authorEmail}
+                                onChange={this.handleInputChange}
+                                name="authorEmail"
+                                placeholder={this.state.authorEmail}
+                                type="email"
+                                disabled
+                              />
+                              <Input
+                                s={6}
+                                label={"To: " + game.author}
+                                value={game.authorEmail}
+                                onChange={this.handleInputChange}
+                                name="emailToWho"
+                                placeholder={game.authorEmail}
+                                type="email"
+                                disabled
+                              />
+
                             </Row>
-                          </Modal>
-                          <p>Contact</p>
-                        </Col>
-                        <Col s={3}>
-                          <Modal
-                              header='Share'
-                              trigger={<i className="material-icons">share</i>}>
-                              <Row>
-                                  <Row>
-                                    <Input placeholder="Email"  s={6} label="Your Email" />
-                                    <Input placeholder="Recipient" s={6}  label="Recipient Email" />
-                                  </Row>
-                                  <Row>
-                                    <Input placeholder="Input message here" s={12} type='textarea' />
-                                  </Row>
-                                  <Row className='center'>
-                                    <Button>Share</Button>
-                                  </Row>
-                              </Row>
-                            </Modal>
+                            <Row>
+                              <Input
+                                s={12}
+                                label="Message"
+                                value={this.state.emailMessageContent}
+                                onChange={this.handleInputChange}
+                                name="emailMessageContent"
+                                placeholder="So excited for the volleyball game. Where is the exact location?"
+                                type='textarea'
+                              />
+                            </Row>
+                            <Row className='center'>
+                              <Button className="modal-close" onClick={() => this.sendMail(game.authorEmail)}>Send</Button>
+
+                            </Row>
+                          </Row>
+                        </Modal>
+                        <p>Contact</p>
+                      </Col>
+                      <Col s={3}>
+                        <Modal
+                          header='Share'
+                          trigger={<i className="material-icons">share</i>}>
+                          <Row>
+                            <Row>
+                              <Input
+                                s={6}
+                                label={"From: " + this.state.author}
+                                value={this.state.authorEmail}
+                                onChange={this.handleInputChange}
+                                name="authorEmail"
+                                placeholder={this.state.authorEmail}
+                                type="email"
+                                disabled
+                              />
+                              <Input
+                                placeholder="JohnDoe@email.com"
+                                s={6}
+                                label="To:"
+                                name="emailToWho"
+                                type="email"
+                                onChange={this.handleInputChange}
+                                value={this.state.emailToWho}
+                                 />
+                            </Row>
+                            <Row>
+                              <Input
+                                s={12}
+                                label="Message"
+                                value={this.state.emailMessageContent}
+                                onChange={this.handleInputChange}
+                                name="emailMessageContent"
+                                placeholder="Hey! Checkout this game I found on WePlay!"
+                                type='textarea'
+                              />
+                            </Row>
+                            <Row className='center'>
+                              <Button className="modal-close" onClick={() => this.sendMail(this.state.emailToWho)}>Share</Button>
+                            </Row>
+                          </Row>
+                        </Modal>
                           <p>Share</p>
                         </Col>
                       </Row>
@@ -475,9 +537,10 @@ class Games extends Component {
                       </Table>
                     </Modal>
                   </CollectionItem>
-                  <CollectionItem > <Modal
+                  <CollectionItem > 
+                  <Modal
                     header='Game'
-                    trigger={<Button className="white" flat waves="teal">Game</Button>}>
+                    trigger={<Button className="white" flat waves="teal">Game</Button>}></Modal></CollectionItem></Collection></CollapsibleItem></Collapsible>
           </SideNavItem>
           {/* FILTER LOCATION- AUTOPOPULATE FROM DB */}
           <SideNavItem>
@@ -670,7 +733,7 @@ class Games extends Component {
                       </tbody>
                       <thead>
                         <tr>
-                          <th data-field="id">Descripton</th>
+                          <th data-field="id">Description</th>
                         </tr>
                       </thead>
                       <tbody>
