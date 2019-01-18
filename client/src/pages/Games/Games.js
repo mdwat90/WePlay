@@ -360,6 +360,124 @@ class Games extends Component {
                 <option value='3'>Football</option>
               </Input>
             </Row>
+
+            <SideNavItem>
+              <Input name='coed' type='checkbox' value='coed' label='Co-Ed' defaultChecked='checked' />
+            </SideNavItem>
+            <SideNavItem>
+              <Input name='male' type='checkbox' value='male' label='Male Only' />
+            </SideNavItem>
+            <SideNavItem>
+              <Input name='female' type='checkbox' value='female' label='Female Only' />
+            </SideNavItem>
+            <br></br>
+            {/* FILTER SPORT-AUTOPOPULATE FROM DB */}
+            <SideNavItem>
+              <Row>
+                <Input s={12} type='select' label="Select Sport">
+                  <option value='all'>All</option>
+                  <option value='1'>Soccer</option>
+                  <option value='2'>Tennis</option>
+                  <option value='3'>Football</option>
+                </Input>
+              </Row>
+            </SideNavItem>
+            {/* FILTER LOCATION- AUTOPOPULATE FROM DB */}
+            <SideNavItem>
+              <Row>
+                <Input s={12} type='select' label="Select Loation">
+                  <option value='all'>All</option>
+                  <option value='1'>Denver</option>
+                  <option value='2'>Centennial</option>
+                  <option value='3'>Aurora</option>
+                </Input>
+              </Row>
+            </SideNavItem>
+
+            <br></br>
+            <SideNavItem divider />
+            <br></br>
+            {/* DROP DOWN UPCOMING GAMES */}
+
+            <Collapsible>
+              <Badge>4</Badge>
+              <CollapsibleItem header='Upcoming Games' icon='arrow_drop_down'>
+                <Collection>
+                  {/* THIS WILL DISPLAY 4 UPCOMING GAMES */}
+                  <CollectionItem>
+                    <Modal
+                      header='Tennis'
+                      trigger={<Button className="white" flat waves="teal">Tennis</Button>}>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Sport</th>
+                            <th data-field="name">Location</th>
+                            <th data-field="price">Date</th>
+                            <th data-field="price">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Tennis</td>
+                            <td>Denver</td>
+                            <td>January 26, 2019</td>
+                            <td>2:00pm</td>
+                          </tr>
+                        </tbody>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Description</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>SPORTS GAME DESCRIPTION</td>
+                          </tr>
+                        </tbody>
+
+                      </Table>
+                    </Modal>
+                  </CollectionItem>
+                  {/* THIS WILL AUTO POPULATE FROM DB */}
+                  <CollectionItem >
+                    <Modal
+                      header='Football'
+                      trigger={<Button className="white" flat waves="teal">Football</Button>}>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Sport</th>
+                            <th data-field="name">Location</th>
+                            <th data-field="price">Date</th>
+                            <th data-field="price">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Football</td>
+                            <td>Denver</td>
+                            <td>January 26, 2019</td>
+                            <td>2:00pm</td>
+                          </tr>
+                        </tbody>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Descripton</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>SPORTS GAME DESCRIPTION</td>
+                          </tr>
+                        </tbody>
+
+                      </Table>
+                    </Modal>
+                  </CollectionItem>
+                  <CollectionItem > <Modal
+                    header='Game'
+                    trigger={<Button className="white" flat waves="teal">Game</Button>}>
           </SideNavItem>
           {/* FILTER LOCATION- AUTOPOPULATE FROM DB */}
           <SideNavItem>
