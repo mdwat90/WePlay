@@ -408,7 +408,6 @@ class Games extends Component {
                     onChange={this.handleChange}
                     name="authorEmail"
                     placeholder="Player Email *"
-<<<<<<< HEAD
                   />
                   <Input
                     s={12}
@@ -418,17 +417,6 @@ class Games extends Component {
                     placeholder="Event Title *"
                   />
                   <Input
-=======
-                  />
-                  <Input
-                    s={12}
-                    value={this.state.title}
-                    onChange={this.handleInputChange}
-                    name="title"
-                    placeholder="Event Title *"
-                  />
-                  <Input
->>>>>>> master
                     s={2}
                     value={this.state.sport}
                     onChange={this.handleInputChange}
