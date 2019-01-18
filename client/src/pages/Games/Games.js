@@ -25,6 +25,7 @@ class Games extends Component {
     state: "",
     description: "",
     emailToWho: "",
+    players: [],
     userImage: this.props.userImage,
     userID: this.props.userID,
     emailMessageContent: ""
@@ -37,24 +38,37 @@ class Games extends Component {
     Geocode.setApiKey("AIzaSyBFxBvSfL6-CmTt4k6mtU03hLHt9OJgHuI");
   }
 
-  // Loads all books and sets them to this.state.books
+  // Loads all books and sets them to this.state.games
   loadGames = () => {
     API.getGames()
       .then(res =>
-        this.setState({
-          games: res.data,
-          title: "",
-          sport: "",
-          playerNumber: "",
-          date: "",
-          time: "",
-          gender: "",
-          city: "",
-          state: "",
-          description: ""
-        })
-      )
-
+          // res.data.map(element => {
+            // console.log(this.props.userID)
+            // console.log(element)
+            // if(this.props.userID == element.email) {
+                // this.setState({
+                //   inGame: true
+                // })
+            // } 
+            // else {
+              // this.setState({
+              //   inGame: false
+              // })
+            // }
+          // })
+          this.setState({
+            games: res.data,
+            title: "",
+            sport: "",
+            playerNumber: "",
+            date: "",
+            time: "",
+            gender: "",
+            city: "",
+            state: "",
+            description: ""
+          })
+        )
       .catch(err => console.log(err));
   };
 
@@ -83,8 +97,9 @@ class Games extends Component {
   // Deletes a book from the database with a given id, then reloads books from the db
   updateGame = (id, userData) => {
     console.log("Player added to game")
-    console.log(id)
-    console.log(userData)
+    this.setState({
+      inGame: true
+    })
     API.updateGame(id, userData)
       .then(res => this.loadGames())
       .catch(err => console.log(err.response));
@@ -169,6 +184,25 @@ class Games extends Component {
           {this.state.games.length ? (
             <List>
               {this.state.games.map(game => {
+                
+                
+                let inGame = ["null"];
+                if(game.players) {
+                  game.players.map(element => {
+                  // console.log("userID: ", this.state.userID)
+                  // console.log("element.email: ", element.email)
+                  console.log("=======")
+                  if(this.state.userID == element.email) {
+                      // console.log("true: ", game._id)
+                      inGame[0] = game._id
+                    } 
+                  })
+                }
+
+
+                // console.log("inGame: ", inGame[0])
+                // console.log("game._id: ", game._id)
+                  
                 return (
                   <ListItem key={game._id}>
 
@@ -204,36 +238,49 @@ class Games extends Component {
                       </tbody>
                     </Table>
 
-                    <Row className='center icons'>
-                      <Col s={3}>
-                        <Modal
-                          header='Attendees'
-                          trigger={<i className="material-icons">people</i>}>
-                          <Row>
-                            <Col s={12}>
-                              {/* Create loop to retrieve all user photos and id's for game */}
-                              <Chip>
-                                <img src={game.authorPhoto} alt='UserImage' />
-                                {game.author}
-                              </Chip>
-                            </Col>
-                          </Row>
-                        </Modal>
-                        <p>{game.playerNumber} spots left!</p>
-                      </Col>
-                      <Col s={3}>
-                        <Modal
-                          header='Location'
-                          trigger={<i className="material-icons">location_on</i>}>
-                          <div className='container'>
-                            <Row>
-                              <SimpleMap lat={game.lat} lng={game.lng}></SimpleMap>
-                            </Row>
-                          </div>
-                        </Modal>
-                        <p>Location</p>
-                      </Col>
-                      <Col s={3}>
+                      <Row className='center icons'>
+                        <Col s={3}>
+                          <Modal
+                              header='Attendees'
+                              trigger={<i className="material-icons">people</i>}>
+                              <Row>
+                                <Col s={12}>
+                                
+                                {/* creates author chip in attendees section */}
+                                  <Chip>
+                                    <img src={game.authorPhoto} alt='UserImage' />
+                                    {game.author}
+                                  </Chip>
+                                  
+                                  {/* creates chips for players if there are players added to game */}
+
+                                  {game.players ? game.players.map(element => {
+                                    return(
+                                      <Chip>
+                                        <img src={element.photo} alt='UserImage' />
+                                        {element.email}
+                                      </Chip>
+                                      )
+                                  }) : console.log('You have no players')}
+
+                                </Col>
+                              </Row>
+                            </Modal>
+                          <p>{game.playerNumber} spots left!</p>
+                        </Col>
+                        <Col s={3}>
+                          <Modal
+                              header='Location'
+                              trigger={<i className="material-icons">location_on</i>}>
+                              <div className='container'>
+                                <Row>
+                                  <SimpleMap lat={game.lat} lng={game.lng}></SimpleMap>
+                                </Row>
+                              </div>
+                            </Modal>
+                          <p>Location</p>
+                        </Col>
+                        <Col s={3}>
                         <Modal
                           header='Contact Event Author'
                           trigger={<i className="material-icons">email</i>}>
