@@ -259,42 +259,98 @@ class Games extends Component {
                           <p>Location</p>
                         </Col>
                         <Col s={3}>
-                          <Modal
-                            header='Contact Event Author'
-                            trigger={<i className="material-icons">email</i>}>
+                        <Modal
+                          header='Contact Event Author'
+                          trigger={<i className="material-icons">email</i>}>
+                          <Row>
                             <Row>
-                                <Row>
-                                <Input placeholder="Your Name" s={12} label={this.state.userID} />
-                                </Row>
-                                <Row>
-                                  <Input placeholder="Input message here" s={12} type='textarea' />
-                                </Row>
-                                <Row className='center'>
-                                  <Button>Send</Button>
-                                </Row>
+                              <Input
+                                s={6}
+                                label={"From: " + this.state.author}
+                                value={this.state.authorEmail}
+                                onChange={this.handleInputChange}
+                                name="authorEmail"
+                                placeholder={this.state.authorEmail}
+                                type="email"
+                                disabled
+                              />
+                              <Input
+                                s={6}
+                                label={"To: " + game.author}
+                                value={game.authorEmail}
+                                onChange={this.handleInputChange}
+                                name="emailToWho"
+                                placeholder={game.authorEmail}
+                                type="email"
+                                disabled
+                              />
+
+                            </Row>
+                            <Row>
+                              <Input
+                                s={12}
+                                label="Message"
+                                value={this.state.emailMessageContent}
+                                onChange={this.handleInputChange}
+                                name="emailMessageContent"
+                                placeholder="So excited for the volleyball game. Where is the exact location?"
+                                type='textarea'
+                              />
+                            </Row>
+                            <Row className='center'>
+                              <Button className="modal-close" onClick={() => this.sendMail(game.authorEmail)}>Send</Button>
+
+                            </Row>
+                          </Row>
+                        </Modal>
+                        <p>Contact</p>
+                      </Col>
+                      <Col s={3}>
+                        <Modal
+                          header='Share'
+                          trigger={<i className="material-icons">share</i>}>
+                          <Row>
+                            <Row>
+                              <Input
+                                s={6}
+                                label={"From: " + this.state.author}
+                                value={this.state.authorEmail}
+                                onChange={this.handleInputChange}
+                                name="authorEmail"
+                                placeholder={this.state.authorEmail}
+                                type="email"
+                                disabled
+                              />
+                              <Input
+                                placeholder="JohnDoe@email.com"
+                                s={6}
+                                label="To:"
+                                name="emailToWho"
+                                type="email"
+                                onChange={this.handleInputChange}
+                                value={this.state.emailToWho}
+                                 />
+                            </Row>
+                            <Row>
+                              <Input
+                                s={12}
+                                label="Message"
+                                value={this.state.emailMessageContent}
+                                onChange={this.handleInputChange}
+                                name="emailMessageContent"
+                                placeholder="Hey! Check out this game I found on WePlay!"
+                                type='textarea'
+                              />
+                            </Row>
+                            <Row className='center'>
+                              <Button className="modal-close" onClick={() => this.sendMail(this.state.emailToWho)}>Share</Button>
+                            </Row>
                             </Row>
                           </Modal>
+                          
                           <p>Contact</p>
                         </Col>
-                        <Col s={3}>
-                          <Modal
-                              header='Share'
-                              trigger={<i className="material-icons">share</i>}>
-                              <Row>
-                                  <Row>
-                                    <Input placeholder="Email"  s={6} label="Your Email" />
-                                    <Input placeholder="Recipient" s={6}  label="Recipient Email" />
-                                  </Row>
-                                  <Row>
-                                    <Input placeholder="Input message here" s={12} type='textarea' />
-                                  </Row>
-                                  <Row className='center'>
-                                    <Button>Share</Button>
-                                  </Row>
-                              </Row>
-                            </Modal>
-                          <p>Share</p>
-                        </Col>
+                        
                       </Row>
 
                       <Row className='center joinBtn'>
