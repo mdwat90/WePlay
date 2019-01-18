@@ -36,9 +36,7 @@
     "if-env": "^1.0.4",
     "jwt-decode": "^2.2.0",
     "mongoose": "^5.4.0",
-    "nodemailer": "^4.7.0"
-  },
-  "devDependencies": {
+    "nodemailer": "^4.7.0",
     "nodemon": "^1.18.9"
   }
 }
