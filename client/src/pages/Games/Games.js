@@ -136,11 +136,19 @@ class Games extends Component {
     }
   };
 
-  sendMail = () => {
+  sendMail = (emailToWho) => {
     console.log("sendMail hit on games.js")
     API.sendMail({
-      emailToWho: this.state.emailToWho
-    })
+      emailToWho: emailToWho,
+      emailMessageContent: this.state.emailMessageContent,
+      emailFromWhoName: this.state.author,
+      emailFromWhoEmail: this.state.authorEmail
+    }).then(
+      this.setState({
+        emailMessageContent: "",
+        emailToWho: "",
+      })
+    )
   }
 
   
