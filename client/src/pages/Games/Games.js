@@ -356,7 +356,7 @@ class Games extends Component {
                             </Row>
                           </Modal>
                           
-                          <p>Contact</p>
+                          <p>Share</p>
                         </Col>
                         
                       </Row>
