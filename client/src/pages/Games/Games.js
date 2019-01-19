@@ -136,11 +136,19 @@ class Games extends Component {
     }
   };
 
-  sendMail = () => {
+  sendMail = (emailToWho) => {
     console.log("sendMail hit on games.js")
     API.sendMail({
-      emailToWho: this.state.emailToWho
-    })
+      emailToWho: emailToWho,
+      emailMessageContent: this.state.emailMessageContent,
+      emailFromWhoName: this.state.author,
+      emailFromWhoEmail: this.state.authorEmail
+    }).then(
+      this.setState({
+        emailMessageContent: "",
+        emailToWho: "",
+      })
+    )
   }
 
   
@@ -271,7 +279,6 @@ class Games extends Component {
                                 onChange={this.handleInputChange}
                                 name="authorEmail"
                                 placeholder={this.state.authorEmail}
-                                type="email"
                                 disabled
                               />
                               <Input
@@ -281,7 +288,6 @@ class Games extends Component {
                                 onChange={this.handleInputChange}
                                 name="emailToWho"
                                 placeholder={game.authorEmail}
-                                type="email"
                                 disabled
                               />
 
@@ -318,7 +324,6 @@ class Games extends Component {
                                 onChange={this.handleInputChange}
                                 name="authorEmail"
                                 placeholder={this.state.authorEmail}
-                                type="email"
                                 disabled
                               />
                               <Input
@@ -326,7 +331,6 @@ class Games extends Component {
                                 s={6}
                                 label="To:"
                                 name="emailToWho"
-                                type="email"
                                 onChange={this.handleInputChange}
                                 value={this.state.emailToWho}
                                  />
@@ -348,7 +352,7 @@ class Games extends Component {
                             </Row>
                           </Modal>
                           
-                          <p>Contact</p>
+                          <p>Share</p>
                         </Col>
                         
                       </Row>
