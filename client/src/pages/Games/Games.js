@@ -279,7 +279,6 @@ class Games extends Component {
                                 onChange={this.handleInputChange}
                                 name="authorEmail"
                                 placeholder={this.state.authorEmail}
-                                type="email"
                                 disabled
                               />
                               <Input
@@ -289,7 +288,6 @@ class Games extends Component {
                                 onChange={this.handleInputChange}
                                 name="emailToWho"
                                 placeholder={game.authorEmail}
-                                type="email"
                                 disabled
                               />
 
@@ -326,7 +324,6 @@ class Games extends Component {
                                 onChange={this.handleInputChange}
                                 name="authorEmail"
                                 placeholder={this.state.authorEmail}
-                                type="email"
                                 disabled
                               />
                               <Input
@@ -334,7 +331,6 @@ class Games extends Component {
                                 s={6}
                                 label="To:"
                                 name="emailToWho"
-                                type="email"
                                 onChange={this.handleInputChange}
                                 value={this.state.emailToWho}
                                  />
